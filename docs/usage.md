@@ -1,7 +1,7 @@
 # Using Socratic Garden
 
 This guide walks through both ways to use Socratic Garden: the agent modes in an
-AI coding tool, and the fallback command-line tool for tools that cannot load
+AI coding tool, and the fallback command-line tool for tools that can't load
 agents directly. For the reasoning behind the design, see
 [philosophy.md](philosophy.md).
 
@@ -33,7 +33,7 @@ The agent modes are the main way to use Socratic Garden.
 7. Copy the parts you want to keep into your own docs or notes.
 
 The modes use read and search tools only. They read your code and docs to ask
-better questions, but they do not edit your files. Nothing they produce is final
+better questions, but they don't edit your files. Nothing they produce is final
 until you decide it is.
 
 ### What a session looks like
@@ -74,10 +74,10 @@ the modes a given change needs.
 
 ## Using the command-line tool
 
-Some AI tools cannot load custom agents. For those, the command-line tool
+Some AI tools can't load custom agents. For those, the command-line tool
 assembles the same agent instructions, skills, and templates into one Markdown
-session file you paste into a chat, such as ChatGPT or Claude. The tool does not
-call an AI provider and does not edit your source files.
+session file you paste into a chat, such as ChatGPT or Claude. The tool doesn't
+call an AI provider and doesn't edit your source files.
 
 Run it from a checkout of this repository.
 

@@ -40,9 +40,11 @@ selector, for example **Clarify Change** or **Design Doc Assistant**. The mode
 composes the skills it needs, works through the change with you, and produces a
 structured artifact from a template.
 
-The agent modes are restricted to read and search tools. They cannot edit your
-source files, so the environment helps you think without changing your code
-behind your back.
+The agent modes are read-only by design: they have read and search tools only, so
+they can read your code and docs to ask sharper questions but can't change
+anything. You place whatever you decide to keep. That's what keeps the work
+human-driven — the environment helps you think without editing your repository on
+its own.
 
 For a full walkthrough of both the agent modes and the command-line tool, see
 [docs/usage.md](docs/usage.md).
@@ -58,7 +60,7 @@ engineering process rather than an output after implementation.
 - User-doc drafts help define the intended user experience.
 - Internal docs preserve reproduction, testing, and maintenance knowledge.
 
-Writing about a change early exposes the parts you have not actually decided yet.
+Writing about a change early exposes the parts you haven't actually decided yet.
 That is the point. Unclear assumptions, missing edge cases, and design gaps are
 cheapest to fix while they are still questions.
 
@@ -75,7 +77,7 @@ composes the skills it needs and ends with a reviewable artifact.
 - **Documentation Reviewer** reviews an existing doc against its purpose.
 - **Draft Documentation** turns goals and plans you have already defined into a
   first draft. Use it after clarifying, defining UX, or planning, not as a way to
-  skip that work. It does not invent product behavior, and it marks unconfirmed
+  skip that work. It doesn't invent product behavior, and it marks unconfirmed
   details with placeholders for you to resolve.
 
 ## The skills
@@ -113,7 +115,7 @@ Within a session, the AI can:
 - suggest structure and produce reviewable drafts,
 - handle boilerplate.
 
-By default, it does not:
+By default, it doesn't:
 
 - decide product behavior,
 - state unsupported claims as fact,
@@ -125,10 +127,10 @@ See [docs/philosophy.md](docs/philosophy.md) for the longer version.
 
 ## Fallback: the CLI
 
-Some tools do not read custom agents. For those, Socratic Garden includes a small
+Some tools don't read custom agents. For those, Socratic Garden includes a small
 standard-library CLI that assembles the same agent instructions, skills, and
 templates into one Markdown session file you paste into ChatGPT, Claude, or a
-similar tool. The CLI does not call an AI provider and does not edit your source
+similar tool. The CLI doesn't call an AI provider and doesn't edit your source
 files.
 
 The CLI needs Python 3.11+ and no third-party dependencies. The agents, skills,
@@ -222,14 +224,15 @@ summary, bounded project context, and the output template.
 Every session is a working artifact, not a source of truth. Review what the AI
 produces and decide what to keep.
 
-## What it does not do
+## What it doesn't do
 
-Socratic Garden does not:
+Socratic Garden doesn't:
 
-- call any AI provider or make network requests,
+- edit your repository, by design — the agent modes are read-only, and the CLI
+  only ever writes session files (plus `socratic-garden.yaml` and the
+  `.socratic-garden/` work directory on `init`),
 - run autonomous file-editing agents,
-- edit your repository, apart from `init`, which may create `socratic-garden.yaml`
-  and the `.socratic-garden/` work directory,
+- call any AI provider or make network requests,
 - act as an MCP server, GitHub app, GitHub Action, or web app,
 - propose diffs or open pull requests,
 - publish documentation on your behalf.
@@ -237,7 +240,7 @@ Socratic Garden does not:
 
 ## Roadmap
 
-The following are possible future directions and are not implemented yet.
+The following are possible future directions and aren't implemented yet.
 
 - Adapters that install the agents and skills for other tools, such as Cursor and
   Claude Code.

@@ -24,7 +24,7 @@ unclear about it.
 ## Human-driven by default
 
 The human remains the driver and the decision maker. Socratic Garden supports the
-human's skills; it does not replace them.
+human's skills; it doesn't replace them.
 
 AI can:
 
@@ -63,7 +63,7 @@ lifecycle is:
    gaps.
 3. **Develop.** Implementation starts after the design direction is sufficiently
    clear. User docs, internal docs, and code-related docs may continue to evolve.
-   Design docs generally represent the finalized direction and should not be
+   Design docs generally represent the finalized direction and shouldn't be
    casually rewritten during implementation.
 4. **Feature finalization / testing.** Compare implementation against the intended
    user experience and documentation. Identify discrepancies between design,
@@ -108,5 +108,6 @@ Human goal
 
 Either way, the human owns truth, strategy, user experience, and final
 documentation. AI handles questioning, synthesis, structure, and boilerplate. The
-agent modes are restricted to read and search tools, so they cannot edit source
-files even by accident.
+agent modes are read-only by design: with read and search tools only, they can't
+edit source files even by accident, so the human-driven promise is enforced by
+the tooling rather than left to good intentions.
