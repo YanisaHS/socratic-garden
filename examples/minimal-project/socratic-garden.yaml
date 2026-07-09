@@ -1,0 +1,28 @@
+project:
+  name: Example Project
+  description: A small example service used to demonstrate Socratic Garden.
+
+sources:
+  public_docs:
+    - docs/
+  design_docs:
+    - design/
+  internal_docs:
+    - internal-docs/
+  code:
+    - src/
+
+audiences:
+  - end users
+  - operators
+  - developers
+  - support engineers
+
+rules:
+  human_decides: true
+  direct_file_edits: false
+  require_source_evidence: true
+  public_claims_require_confirmation: true
+
+outputs:
+  work_dir: .socratic-garden

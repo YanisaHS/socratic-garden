@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "socratic-garden"
+version = "0.1.0"
+description = "A docs-centered, human-driven AI environment for engineering teams."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+keywords = ["documentation", "ai", "engineering", "design-docs"]
+dependencies = []
+
+[project.optional-dependencies]
+# Optional: install PyYAML for full YAML support. Not required; a minimal YAML
+# subset parser is built in.
+yaml = ["PyYAML>=6.0"]
+
+[project.scripts]
+socratic-garden = "socratic_garden.cli:main"
+
+[tool.setuptools]
+packages = ["socratic_garden"]

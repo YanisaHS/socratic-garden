@@ -1,0 +1,14 @@
+# Socratic Garden local work directory (generated artifacts).
+.socratic-garden/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
