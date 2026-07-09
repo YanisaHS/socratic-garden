@@ -8,21 +8,23 @@
 
 > *This project is a work in progress.*
 
-Socratic Garden is a set of AI agent modes and skills that help you produce
-better documentation by thinking a change through before you write it up. The
-skills are reusable disciplines aimed at documentation quality: drawing out
-unstated decisions, separating fact from inference, finding edge cases, and
-routing each piece of knowledge to the right kind of doc. An agent mode composes
-several of these skills and ends with a reviewable artifact.
+Socratic Garden helps engineering teams produce better documentation.
 
-The main purpose is thinking that leads to good documentation, not churning out
-text. A design doc that comes out of Socratic Garden should reflect a feature
-that has actually been thought through: its goals, alternatives, edge cases, and
-open questions made explicit. A mode can produce a first draft when you ask, but
-its more valuable job is to make sure what you document is worth documenting.
+It does this by helping you think a change through: what it really does, who it
+affects, which decisions are still open, and where the reasoning needs improvements.
+Working this out gives you clearer design docs, user docs, and internal notes —
+and, because the gaps surface early, a better thought-out product at the end.
 
-Socratic Garden is meant for engineers and technical writers. Both need a shared,
-honest picture of what a change actually does.
+It's built around agent modes and reusable skills. A mode guides a task, such
+as clarifying a change, defining user experience, planning docs, drafting, or
+reviewing. Skills provide the reusable habits behind that work: drawing out
+unstated assumptions, separating fact from inference, identifying edge cases,
+and routing information to the right kind of doc.
+
+The point is to make the thinking behind the documentation clearer, so the
+artifacts you keep are easier to trust, revise, and maintain.
+
+Humans remain responsible for product decisions, user experience, technical accuracy, and final documentation.
 
 ## How it works
 
