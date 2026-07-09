@@ -1,4 +1,9 @@
-# Skill: Identify edge cases
+---
+name: identify-edge-cases
+description: 'Find what the happy path misses: boundary conditions, failure modes, ambiguous states, hidden assumptions, and uncovered user paths. Use when defining behavior, reviewing a design, or checking a doc for gaps.'
+---
+
+# Identify edge cases
 
 Help the human find what the happy path misses. For the behavior in question,
 probe for:

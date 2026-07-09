@@ -4,47 +4,112 @@
 
 > *This project is a work in progress.*
 
-Socratic Garden helps you use AI to ask better questions before you write the
-docs. It doesn't try to automate documentation decisions — it tries to make those
-decisions easier to see, discuss, and record.
+Socratic Garden is a set of AI agent modes and skills that help you produce
+better documentation by thinking a change through before you write it up. The
+skills are reusable disciplines aimed at documentation quality: drawing out
+unstated decisions, separating fact from inference, finding edge cases, and
+routing each piece of knowledge to the right kind of doc. An agent mode composes
+several of these skills and ends with a reviewable artifact.
 
-## What Socratic Garden is
+The main purpose is thinking that leads to good documentation, not churning out
+text. A design doc that comes out of Socratic Garden should reflect a feature
+that has actually been thought through: its goals, alternatives, edge cases, and
+open questions made explicit. A mode can produce a first draft when you ask, but
+its more valuable job is to make sure what you document is worth documenting.
 
-Socratic Garden is a command-line tool. You run a command, it writes a Markdown
-**session file**, and you paste that file into whatever AI tool you already use —
-ChatGPT, Claude, Cursor, or something else. The session file tells the AI what
-you're working on, what role to play, and what to hand back.
+Socratic Garden is meant for engineers and technical writers. Both need a shared,
+honest picture of what a change actually does.
 
-It does not call any AI provider itself, and it does not touch your repository
-beyond writing those session files. Nothing it produces is final until you say
-so.
+## How it works
 
-## What problem it solves
+Socratic Garden lives in a `.github/` folder you can drop into any repository.
 
-Documentation usually gets written last, once the real decisions are already
-buried in code and old chat threads. Socratic Garden treats documentation as part
-of the engineering process, not only as an output after implementation. Design
-docs capture decisions. User-doc drafts help define the intended user experience.
-Internal docs preserve reproduction, testing, and maintenance knowledge.
+- `.github/agents/` holds six custom agent modes you invoke in VS Code Copilot,
+  or any tool that reads custom agents.
+- `.github/skills/` holds the reusable skills those modes draw on, each a
+  discipline for producing better documentation: interviewing, separating fact
+  from inference, finding edge cases, routing knowledge to the right doc, and
+  more. The set is meant to grow.
 
-Writing about a change early tends to expose the parts you haven't actually
-decided yet. That is the point: surface unclear assumptions, missing edge cases,
-and design gaps while they are still cheap to fix.
+Open the repository in VS Code with Copilot and pick an agent mode from the agent
+selector, for example **Clarify Change** or **Design Doc Assistant**. The mode
+composes the skills it needs, works through the change with you, and produces a
+structured artifact from a template.
+
+The agent modes are restricted to read and search tools. They cannot edit your
+source files, so the environment helps you think without changing your code
+behind your back.
+
+For a full walkthrough of both the agent modes and the command-line tool, see
+[docs/usage.md](docs/usage.md).
+
+## Why documentation comes first
+
+Documentation is often written last, after the real decisions are already buried
+in code and old chat threads. Socratic Garden treats documentation as part of the
+engineering process rather than an output after implementation.
+
+- Design docs record decisions: the problem, the alternatives, and the direction
+  chosen.
+- User-doc drafts help define the intended user experience.
+- Internal docs preserve reproduction, testing, and maintenance knowledge.
+
+Writing about a change early exposes the parts you have not actually decided yet.
+That is the point. Unclear assumptions, missing edge cases, and design gaps are
+cheapest to fix while they are still questions.
+
+## The agent modes
+
+Each mode is a custom agent under [.github/agents/](.github/agents). A mode
+composes the skills it needs and ends with a reviewable artifact.
+
+- **Clarify Change** clarifies a feature idea, behavior change, bug fix, or
+  proposal before or during design.
+- **Define User Experience** defines the intended user experience for a feature.
+- **Design Doc Assistant** creates or reviews an engineering design document.
+- **Documentation Planner** decides what documentation artifacts a change needs.
+- **Documentation Reviewer** reviews an existing doc against its purpose.
+- **Draft Documentation** turns goals and plans you have already defined into a
+  first draft. Use it after clarifying, defining UX, or planning, not as a way to
+  skip that work. It does not invent product behavior, and it marks unconfirmed
+  details with placeholders for you to resolve.
+
+## The skills
+
+Skills are reusable disciplines the modes share, under
+[.github/skills/](.github/skills). Each one is a habit of good documentation
+work, and the library is meant to grow as new disciplines prove useful.
+
+- **grilling** draws out unstated goals and decisions by interviewing you one
+  question at a time.
+- **separate-fact-from-inference** labels what is known versus assumed.
+- **extract-user-facing-implications** turns changes into user-visible effects.
+- **identify-edge-cases** surfaces boundaries, failure modes, and gaps.
+- **route-documentation-artifacts** decides which docs a change needs.
+- **documentation-templates** holds the output structures every mode produces.
+  The templates live under
+  [.github/skills/documentation-templates/assets/](.github/skills/documentation-templates/assets).
+
+Grilling is one skill among these, not the whole point. A mode leans on it when a
+change is still fuzzy, and on the others when the work is to sort evidence, find
+gaps, or route and structure a doc.
+
+To add a skill, create a `SKILL.md`, link it from an agent mode, and it is picked
+up automatically. No code changes are required.
 
 ## Human-driven AI principles
 
-You stay in charge. Socratic Garden is built so the AI does the legwork and you
-make the calls.
+You stay in charge. Socratic Garden does the legwork so you can make the calls.
 
-Within a session, the AI is meant to:
+Within a session, the AI can:
 
-- ask clarifying questions,
+- ask clarifying questions, one at a time,
 - assemble context and summarize source material,
 - point out missing decisions, user-facing implications, and edge cases,
 - suggest structure and produce reviewable drafts,
 - handle boilerplate.
 
-By default, it should not:
+By default, it does not:
 
 - decide product behavior,
 - state unsupported claims as fact,
@@ -54,104 +119,41 @@ By default, it should not:
 
 See [docs/philosophy.md](docs/philosophy.md) for the longer version.
 
-## How it relates to documentation-driven development
+## Fallback: the CLI
 
-Socratic Garden reflects a documentation-driven development lifecycle:
+Some tools do not read custom agents. For those, Socratic Garden includes a small
+standard-library CLI that assembles the same agent instructions, skills, and
+templates into one Markdown session file you paste into ChatGPT, Claude, or a
+similar tool. The CLI does not call an AI provider and does not edit your source
+files.
 
-1. **Design** — clarify the problem, goals, constraints, and proposed solution;
-   create or review design docs; identify decisions and open questions.
-2. **Document** — draft user-facing docs early to define the intended experience;
-   capture internal notes; use docs to expose gaps.
-3. **Develop** — implement once the design direction is clear; docs keep evolving.
-4. **Feature finalization / testing** — compare implementation against the
-   intended experience; prepare release-note input.
-5. **Maintenance** — review and update docs when behavior changes.
-
-Socratic Garden is most useful early — during design and documentation
-planning — while the important questions are still open.
-
-## Supported artifact types
-
-Socratic Garden supports more than public user docs. It helps with:
-
-- engineering design docs
-- public user documentation drafts
-- internal engineering notes
-- reproduction / testing notes
-- release-note input
-- documentation plans
-- review reports
-- decision and edge-case analysis
-
-## What v0.1 does
-
-- Provides six **agent modes** (human-facing workflows).
-- Provides reusable **skills** that agent modes reference.
-- Provides **templates** for the expected output artifacts.
-- Reads a project **config** file so the environment stays project-agnostic.
-- Assembles bounded project **context**.
-- Generates timestamped Markdown **session files** you paste into an AI tool.
-
-## What it deliberately does not do
-
-v0.1 does **not**:
-
-- call any AI provider or make network requests,
-- run autonomous file-editing agents,
-- edit your repository (except `init`, which may create `socratic-garden.yaml`
-  and the `.socratic-garden/` work directory),
-- act as an MCP server, GitHub app, GitHub Action, or web app,
-- propose diffs or open pull requests,
-- publish documentation.
-
-This is a personal, early-stage project. It is not production-ready and is not
-autonomous.
-
-## Installation / local usage
-
-Requires Python 3.11+. No third-party dependencies are required.
-
-Run directly from a checkout:
+The CLI needs Python 3.11+ and no third-party dependencies. The agents, skills,
+and templates live at the repository root under `.github/`, so run the CLI from a
+checkout of this repository.
 
 ```bash
-python -m socratic_garden --help
-```
+# List what's available.
+python -m socratic_garden modes
+python -m socratic_garden skills
 
-Or install it to get the `socratic-garden` console script:
-
-```bash
-pip install -e .
-socratic-garden --help
-```
-
-A `Makefile` provides shortcuts:
-
-```bash
-make help
-```
-
-## Example workflow
-
-```bash
-# 1. Initialize config and the work directory.
+# Create a config and work directory in your project.
 python -m socratic_garden init
 
-# 2. Clarify a change. This generates a session file.
+# Generate a fallback session to paste into an AI tool.
 python -m socratic_garden clarify --topic "new configuration option"
 
-# 3. Open the generated file under .socratic-garden/sessions/ and paste it
-#    into your AI tool. Work through the questions and produce the artifact.
-
-# 4. Review an existing doc, using the example project's config:
+# Review an existing doc, using the example project's config.
 python -m socratic_garden review \
   --file examples/minimal-project/docs/example-user-doc.md \
   --config examples/minimal-project/socratic-garden.yaml
 ```
 
-Available commands:
+Commands:
 
 ```bash
 socratic-garden init
+socratic-garden modes
+socratic-garden skills
 socratic-garden clarify   --topic "..."
 socratic-garden ux        --topic "..."
 socratic-garden design    --topic "..."
@@ -160,13 +162,14 @@ socratic-garden draft     --topic "..." [--file path/to/brief.md]
 socratic-garden review    --file path/to/doc.md
 ```
 
-All commands accept `--config path/to/socratic-garden.yaml` (default:
-`socratic-garden.yaml`).
+All session-generating commands accept `--config path/to/socratic-garden.yaml`.
+The default is `socratic-garden.yaml`. A `Makefile` provides shortcuts; run
+`make help`.
 
-## Project config example
+## Project config
 
 A project supplies its own context and source locations through
-`socratic-garden.yaml`:
+`socratic-garden.yaml`, so the environment stays project-agnostic.
 
 ```yaml
 project:
@@ -199,70 +202,47 @@ outputs:
   work_dir: .socratic-garden
 ```
 
-The config is project-agnostic. Socratic Garden makes no product-specific
-assumptions. YAML support uses a built-in minimal parser; installing PyYAML
+YAML support uses a built-in minimal parser. Installing PyYAML
 (`pip install -e ".[yaml]"`) enables full YAML if you need it.
 
-## Agent modes and skills
+## Generated fallback sessions
 
-**Agent modes** are human-facing workflows. Each maps to instructions in
-[agents/](agents/):
-
-- **Clarify Change** — clarify a feature idea, behavior change, bug fix, or
-  proposal before or during design.
-- **Define User Experience** — define the intended user experience for a feature.
-- **Design Doc Assistant** — create or review an engineering design document.
-- **Documentation Planner** — decide what documentation artifacts are needed.
-- **Draft Documentation** — turn goals and plans you have *already defined* into
-  a first draft. This is deliberately a boilerplate/scaffolding step: use it
-  after clarifying, defining UX, or planning, not as a way to skip that work.
-  It will not invent product behavior, and it marks unconfirmed details with
-  placeholders for you to resolve.
-- **Documentation Reviewer** — review an existing doc against its purpose.
-
-**Skills** are reusable capabilities that agent modes reference, in
-[skills/](skills/):
-
-- interview one question at a time
-- separate fact from inference
-- extract user-facing implications
-- identify edge cases
-- route documentation artifacts
-
-**Templates** in [templates/](templates/) define the structure of each output
-artifact (change brief, user experience brief, design doc outline, documentation
-plan, documentation draft, review report).
-
-## Generated artifacts
-
-Each command writes a self-contained Markdown session file under
+Each fallback command writes a self-contained Markdown session under
 `.socratic-garden/sessions/` with a timestamped name, for example
-`.socratic-garden/sessions/2026-07-09-clarify-new-configuration-option.md`.
+`.socratic-garden/sessions/2026-07-09-clarify-change-new-configuration-option.md`.
 
-A session combines the agent mode instructions, relevant skills, a project config
-summary, bounded project context, the output template, a human authority
-reminder, and instructions to the AI tool.
+A session leads with how to use it and a human-authority reminder, then combines
+your goal, the agent mode instructions, the relevant skills, a project config
+summary, bounded project context, and the output template.
 
-The `.socratic-garden/` work directory also contains `context-packs/`, `briefs/`,
-`drafts/`, `reviews/`, and `decisions/` folders. In v0.1 only `sessions/` is
-actively used; the others exist so the intended artifact model is clear.
+Every session is a working artifact, not a source of truth. Review what the AI
+produces and decide what to keep.
 
-**Every session is a working artifact, not a source of truth.** Review everything
-the AI produces. You decide what to keep.
+## What it does not do
+
+Socratic Garden does not:
+
+- call any AI provider or make network requests,
+- run autonomous file-editing agents,
+- edit your repository, apart from `init`, which may create `socratic-garden.yaml`
+  and the `.socratic-garden/` work directory,
+- act as an MCP server, GitHub app, GitHub Action, or web app,
+- propose diffs or open pull requests,
+- publish documentation on your behalf.
+
 
 ## Roadmap
 
-Possible future directions (not implemented yet):
+The following are possible future directions and are not implemented yet.
 
-- optional AI provider integration
-- a patch proposal mode that creates reviewable diffs
-- Git diff / pull-request context mode
-- design doc comparison mode
-- context update proposals
-- artifact validation
-- project-specific adapters
-- agent packaging for specific tools
-- CI support for deterministic checks
+- Adapters that install the agents and skills for other tools, such as Cursor and
+  Claude Code.
+- A router skill that picks the right mode for you.
+- Optional AI provider integration for the fallback path.
+- A patch proposal mode that creates reviewable diffs.
+- A Git diff or pull-request context mode.
+- A design doc comparison mode.
+- Artifact validation and CI support for deterministic checks.
 
 ## License
 

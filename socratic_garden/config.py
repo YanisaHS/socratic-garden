@@ -1,8 +1,8 @@
 """Project configuration loading for Socratic Garden.
 
 The project config is a small YAML file (``socratic-garden.yaml``). To keep
-v0.1 dependency-free, this module ships a minimal YAML *subset* parser that
-supports exactly what the documented config format needs:
+Socratic Garden dependency-free, this module ships a minimal YAML *subset*
+parser that supports exactly what the documented config format needs:
 
 * nested mappings expressed through indentation,
 * block sequences (``- item``),

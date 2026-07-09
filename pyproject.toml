@@ -16,9 +16,18 @@ dependencies = []
 # Optional: install PyYAML for full YAML support. Not required; a minimal YAML
 # subset parser is built in.
 yaml = ["PyYAML>=6.0"]
+# Development: run the test suite.
+dev = ["pytest>=7.0"]
 
 [project.scripts]
 socratic-garden = "socratic_garden.cli:main"
 
 [tool.setuptools]
 packages = ["socratic_garden"]
+
+# The agent modes, skills, and templates live at the repository root under
+# .github/, not inside the Python package, so the CLI is intended to run from a
+# checkout of this repository rather than an isolated wheel install.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

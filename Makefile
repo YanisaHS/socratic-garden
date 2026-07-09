@@ -1,6 +1,8 @@
 .PHONY: help
 help:
 	@echo "Socratic Garden commands:"
+	@echo "  make modes"
+	@echo "  make skills"
 	@echo "  make init"
 	@echo "  make clarify TOPIC='...'"
 	@echo "  make ux TOPIC='...'"
@@ -8,6 +10,15 @@ help:
 	@echo "  make plan-docs TOPIC='...'"
 	@echo "  make draft TOPIC='...' [FILE='path/to/brief.md']"
 	@echo "  make review FILE='path/to/doc.md'"
+	@echo "  make test"
+
+.PHONY: modes
+modes:
+	python -m socratic_garden modes
+
+.PHONY: skills
+skills:
+	python -m socratic_garden skills
 
 .PHONY: init
 init:
@@ -36,3 +47,7 @@ draft:
 .PHONY: review
 review:
 	python -m socratic_garden review --file "$(FILE)"
+
+.PHONY: test
+test:
+	python -m pytest

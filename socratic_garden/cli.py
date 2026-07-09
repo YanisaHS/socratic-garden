@@ -1,8 +1,10 @@
 """Command-line interface for Socratic Garden.
 
-Uses only the standard library (:mod:`argparse`). Commands generate Markdown
-session files under the project's ``.socratic-garden/sessions/`` directory. No
-network or AI calls are made.
+Uses only the standard library (:mod:`argparse`). The primary way to use Socratic
+Garden is the agent-native layer under ``.github/`` (custom agents and skills)
+loaded directly by a coding agent. This CLI is a companion: it lists the
+available agent modes and skills, and generates fallback Markdown session files
+for AI tools without native agent-skill support. No network or AI calls are made.
 """
 
 from __future__ import annotations
@@ -18,7 +20,13 @@ from socratic_garden.config import (
     ConfigError,
     load_config,
 )
-from socratic_garden.sessions import GeneratedSession, SessionError, generate_session
+from socratic_garden.sessions import (
+    GeneratedSession,
+    SessionError,
+    discover_modes,
+    discover_skills,
+    generate_session,
+)
 
 
 def _add_config_arg(parser: argparse.ArgumentParser) -> None:
@@ -34,9 +42,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="socratic-garden",
         description=(
-            "Socratic Garden: a docs-centered, human-driven AI environment. "
-            "Generates Markdown session files to paste into an AI tool. It does "
-            "not call AI providers or edit your repository."
+            "Socratic Garden: a docs-centered, human-driven AI environment. The "
+            "agents and skills under .github/ are the main event; this CLI lists "
+            "them and generates fallback session files to paste into AI tools "
+            "without agent-skill support. It never calls AI providers or edits "
+            "your source files."
         ),
     )
     parser.add_argument(
@@ -48,6 +58,9 @@ def build_parser() -> argparse.ArgumentParser:
         "init", help="Create socratic-garden.yaml and the .socratic-garden/ work dir."
     )
     _add_config_arg(p_init)
+
+    sub.add_parser("modes", help="List the available agent modes.")
+    sub.add_parser("skills", help="List the available skills.")
 
     for name, help_text in (
         ("clarify", "Clarify a feature idea, behavior change, bug fix, or proposal."),
@@ -137,7 +150,10 @@ def cmd_init(config_arg: str) -> int:
     print()
     print("Next steps:")
     print("  1. Edit socratic-garden.yaml to describe your project and sources.")
-    print('  2. Run a session, e.g. socratic-garden clarify --topic "..."')
+    print("  2. In VS Code Copilot, pick an agent mode (e.g. Clarify Change) and")
+    print("     start a conversation. Run 'socratic-garden modes' to see them.")
+    print('  3. No agent-skill support? Generate a fallback session instead, e.g.')
+    print('     socratic-garden clarify --topic "..."')
     return 0
 
 
@@ -146,6 +162,54 @@ def _safe_work_dir(config_path: Path) -> str:
         return load_config(config_path).work_dir
     except ConfigError:
         return paths.DEFAULT_WORK_DIR
+
+
+def _first_sentence(text: str) -> str:
+    text = text.strip()
+    if not text:
+        return ""
+    dot = text.find(". ")
+    return text[: dot + 1] if dot != -1 else text
+
+
+def cmd_modes() -> int:
+    try:
+        modes = discover_modes()
+    except SessionError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
+    # Show short verbs where they exist, falling back to the stem.
+    from socratic_garden.sessions import COMMAND_ALIASES
+
+    stem_to_verb = {stem: verb for verb, stem in COMMAND_ALIASES.items()}
+    print("Agent modes (use in VS Code Copilot, or via the fallback CLI):")
+    print()
+    for mode in modes.values():
+        verb = stem_to_verb.get(mode.key, mode.key)
+        print(f"  {verb:<11} {mode.title}")
+        summary = _first_sentence(mode.description)
+        if summary:
+            print(f"              {summary}")
+    print()
+    print("In VS Code Copilot: pick a mode from the agent selector.")
+    print('Fallback: socratic-garden <mode> --topic "..."')
+    return 0
+
+
+def cmd_skills() -> int:
+    skills = discover_skills()
+    if not skills:
+        print("No skills found under .github/skills/.", file=sys.stderr)
+        return 1
+    print("Skills (reusable disciplines the agent modes draw on):")
+    print()
+    for doc in skills:
+        name = doc.get_str("name", "(unnamed)")
+        print(f"  {name}")
+        summary = _first_sentence(doc.get_str("description"))
+        if summary:
+            print(f"    {summary}")
+    return 0
 
 
 def _run_session(command: str, config_arg: str, topic: str, input_file: str | None) -> int:
@@ -171,11 +235,11 @@ def _report(command: str, config: Config, result: GeneratedSession) -> None:
     for warning in result.warnings:
         print(f"Warning: {warning}", file=sys.stderr)
 
-    print(f"Generated session: {result.path}")
+    print(f"Generated fallback session: {result.path}")
     print()
     print("What to do next:")
     print("  1. Open the session file and skim it.")
-    print("  2. Paste its contents into your AI tool (ChatGPT, Claude, Cursor, etc.).")
+    print("  2. Paste its contents into your AI tool (e.g. ChatGPT or Claude).")
     print("  3. Work through the questions and produce the artifact.")
     print("  4. Save any output you want to keep under your .socratic-garden/ folders.")
     print()
@@ -195,6 +259,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "init":
         return cmd_init(args.config)
+
+    if args.command == "modes":
+        return cmd_modes()
+
+    if args.command == "skills":
+        return cmd_skills()
 
     if args.command == "review":
         topic = args.topic or f"Review the documentation file: {args.file}"

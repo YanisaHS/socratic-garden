@@ -19,10 +19,18 @@ from pathlib import Path
 PACKAGE_ROOT = Path(__file__).resolve().parent
 REPO_ROOT = PACKAGE_ROOT.parent
 
-# Bundled, read-only resources.
-AGENTS_DIR = REPO_ROOT / "agents"
-SKILLS_DIR = REPO_ROOT / "skills"
-TEMPLATES_DIR = REPO_ROOT / "templates"
+# Bundled, agent-native resources. These live under .github/ so that opening the
+# repository in VS Code exposes the agents and skills directly, and so the whole
+# set can be copied into another project's .github/ folder.
+#
+# NOTE: because these resources live at the repo root rather than inside the
+# Python package, the CLI is designed to be run from a checkout of the repo. It
+# is a fallback generator for AI tools that do not support agent skills, not the
+# primary way to use Socratic Garden.
+GITHUB_DIR = REPO_ROOT / ".github"
+AGENTS_DIR = GITHUB_DIR / "agents"
+SKILLS_DIR = GITHUB_DIR / "skills"
+TEMPLATES_DIR = SKILLS_DIR / "documentation-templates" / "assets"
 
 # Default project config filename.
 DEFAULT_CONFIG_NAME = "socratic-garden.yaml"
@@ -31,7 +39,7 @@ DEFAULT_CONFIG_NAME = "socratic-garden.yaml"
 DEFAULT_WORK_DIR = ".socratic-garden"
 
 # Sub-directories created inside the work directory during ``init``.
-# Only ``sessions`` is actively used in v0.1; the rest exist so that the
+# Only ``sessions`` is actively used so far; the rest exist so that the
 # intended artifact model is clear.
 WORK_SUBDIRS = (
     "sessions",

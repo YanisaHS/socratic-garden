@@ -1,6 +1,6 @@
 """Bounded project-context assembly for Socratic Garden.
 
-Context assembly in v0.1 is intentionally small and predictable:
+Context assembly is intentionally small and predictable:
 
 * For each configured source directory, include a short file-tree snippet.
 * Include the full content of a file only when it is explicitly supplied

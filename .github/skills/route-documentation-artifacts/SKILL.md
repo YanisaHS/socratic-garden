@@ -1,4 +1,9 @@
-# Skill: Route documentation artifacts
+---
+name: route-documentation-artifacts
+description: 'Decide where a piece of knowledge belongs: design docs, public user docs, internal docs, release notes, troubleshooting docs, or no docs yet. Use when planning documentation so work is not written in the wrong place or written before it is needed.'
+---
+
+# Route documentation artifacts
 
 Help decide where a piece of knowledge belongs. Not everything needs public docs,
 and not everything needs docs right now. Route each item to one or more of:
@@ -11,7 +16,7 @@ and not everything needs docs right now. Route each item to one or more of:
 - **Troubleshooting docs** — known issues, errors, and their resolutions.
 - **No docs yet** — nothing to write at this stage (note why).
 
-Guidance:
+## Guidance
 
 - Prefer the smallest set of artifacts that captures the knowledge well.
 - If routing depends on an unknown, mark it as needing SME clarification.

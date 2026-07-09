@@ -1,9 +1,10 @@
 # Philosophy
 
 Socratic Garden is a docs-centered, human-driven AI environment. It helps you use
-AI to ask better questions before you write the docs. It doesn't try to automate
-documentation decisions — it tries to make those decisions easier to see, discuss,
-and record.
+AI to ask better questions before you write the docs. The main purpose is the
+thinking a change requires, not the documents it produces. Socratic Garden can
+draft a doc when you ask it to, but its more valuable job is to make the
+decisions behind a change easy to see, discuss, and record.
 
 ## Documentation is a window into the engineering process
 
@@ -76,18 +77,36 @@ stages, where good questions have the most leverage.
 ## The artifact model
 
 Every Socratic Garden session produces a **working artifact**, not a source of
-truth. The conceptual flow is:
+truth. You reach it one of two ways.
+
+The primary path is agent-native. You open the repository in a tool that reads
+custom agents (VS Code Copilot), pick an agent mode, and it works through the
+change with you using its skills:
 
 ```
 Human goal
-  → Socratic Garden agent mode
-    → reusable skills
-      → project context
-        → generated session file
-          → human runs session in AI tool
-            → AI produces reviewable artifact
-              → human decides what to keep
+  → agent mode (.github/agents)
+    → reusable skills (.github/skills)
+      → project + repository context
+        → the mode applies its skills with you (interviewing, sorting evidence,
+          finding gaps, structuring the doc)
+          → reviewable artifact
+            → human decides what to keep
 ```
 
-The human owns truth, strategy, user experience, and final documentation. AI
-handles questioning, synthesis, structure, and boilerplate.
+The fallback path serves tools without agent-skill support. The CLI assembles the
+same instructions, skills, and templates into a session file you paste in:
+
+```
+Human goal
+  → CLI assembles agent mode + skills + template + bounded context
+    → generated session file
+      → human runs session in an AI tool
+        → reviewable artifact
+          → human decides what to keep
+```
+
+Either way, the human owns truth, strategy, user experience, and final
+documentation. AI handles questioning, synthesis, structure, and boilerplate. The
+agent modes are restricted to read and search tools, so they cannot edit source
+files even by accident.
