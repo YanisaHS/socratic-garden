@@ -1,6 +1,10 @@
-# Socratic Garden
+<p align="center">
+  <img src="docs/assets/logo.svg" alt="Socratic Garden logo" width="140" height="140">
+</p>
 
-**A docs-centered, human-driven AI environment for engineering teams.**
+<h1 align="center">Socratic Garden</h1>
+
+<p align="center"><strong>A docs-centered, human-driven AI environment for engineering teams.</strong></p>
 
 > *This project is a work in progress.*
 
