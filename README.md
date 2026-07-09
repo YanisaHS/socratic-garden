@@ -2,6 +2,8 @@
 
 **A docs-centered, human-driven AI environment for engineering teams.**
 
+> *This project is a work in progress.*
+
 Socratic Garden helps you use AI to ask better questions before you write the
 docs. It doesn't try to automate documentation decisions — it tries to make those
 decisions easier to see, discuss, and record.
