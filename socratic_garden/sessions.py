@@ -2,8 +2,7 @@
 
 The primary way to use Socratic Garden is the agent-native layer under
 ``.github/`` (custom agents in ``.github/agents/`` and skills in
-``.github/skills/``), which a coding agent such as VS Code Copilot loads
-directly.
+``.github/skills/``), which a tool such as the Copilot CLI loads directly.
 
 For AI tools that do not support agent skills (for example the plain ChatGPT or
 Claude web apps), this module generates a *fallback session*: a single
@@ -163,7 +162,8 @@ experience, and every final documentation decision.
 - You may ask questions, assemble context, summarize source material, identify
   missing decisions and edge cases, suggest structure, and produce drafts.
 - You must **not** decide product behavior, state unsupported claims as fact,
-  edit source files, publish anything, or treat your own inferences as truth.
+  edit files or publish anything without the human's explicit approval, or treat
+  your own inferences as truth.
 - Everything you produce here is something the human may edit, accept, reject, or
   ignore.
 """

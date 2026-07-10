@@ -6,8 +6,6 @@
 
 <p align="center"><strong>A docs-centered, human-driven AI environment for engineering teams.</strong></p>
 
-> *This project is a work in progress.*
-
 Socratic Garden helps engineering teams produce better documentation and better products.
 
 It does this by helping you think a change through: what the change really does, who it
@@ -30,23 +28,48 @@ Humans remain responsible for product decisions, user experience, technical accu
 
 Socratic Garden lives in a `.github/` folder you can drop into any repository.
 
-- `.github/agents/` holds six custom agent modes you invoke in VS Code Copilot,
-  or any tool that reads custom agents.
+- `.github/agents/` holds six custom agent modes you invoke from the Copilot CLI
+  (or any other tool that reads custom agents).
 - `.github/skills/` holds the reusable skills those modes draw on, each a
   discipline for producing better documentation: interviewing, separating fact
   from inference, finding edge cases, routing knowledge to the right doc, and
   more. The set is meant to grow.
 
-Open the repository in VS Code with Copilot and pick an agent mode from the agent
-selector, for example **Clarify Change** or **Design Doc Assistant**. The mode
-composes the skills it needs, works through the change with you, and produces a
-structured artifact from a template.
+You use the agent modes in any tool that reads custom agents. Pick a mode — for
+example **Clarify Change** or **Design Doc Assistant** — and it composes the
+skills it needs, works through the change with you, and produces a structured
+artifact from a template.
 
-The agent modes are read-only by design: they have read and search tools only, so
-they can read your code and docs to ask sharper questions but can't change
-anything. You place whatever you decide to keep. That's what keeps the work
-human-driven — the environment helps you think without editing your repository on
-its own.
+The agent modes think first and write only with your approval. They have read and
+search tools to read your code and docs and ask sharper questions, and they
+produce their artifacts in the chat for you to review. When you want to keep
+something, they can write it to a new file or update an existing doc. Nothing is written on its own. That's what keeps the
+work human-driven: you decide what gets saved.
+
+## Getting started
+
+You need a tool that reads custom agents. These steps use Copilot CLI, but other tools
+will work similarly.
+
+1. Clone this project and `cd` into it:
+
+   ```bash
+   git clone <this-repo>
+   cd socratic-garden
+   ```
+
+2. Run the Copilot CLI from the project directory:
+
+   ```bash
+   copilot
+   ```
+
+3. Inside the CLI, pick an agent mode with `/agent`. For example **Clarify
+   Change** or **Design Doc Assistant**, then describe what you're working on.
+
+The mode works through the change with you and produces a reviewable artifact.
+Python 3.11+ is only needed for the fallback command-line tool, not the agent
+modes.
 
 For a full walkthrough of both the agent modes and the command-line tool, see
 [docs/usage.md](docs/usage.md).
@@ -105,6 +128,8 @@ work, and the library is meant to grow as new disciplines prove useful.
 - **trace-documentation-ripple** finds existing docs a change also affects.
 - **compare-design-to-docs** checks a doc against its source material for
   alignment.
+- **calibrate-scrutiny** keeps feedback proportional: concise by default, and a
+  deeper, structured pass only when the stakes call for it.
 - **documentation-templates** holds the output structures every mode produces.
   The templates live under
   [.github/skills/documentation-templates/assets/](.github/skills/documentation-templates/assets).
@@ -126,13 +151,14 @@ Within a session, the AI can:
 - assemble context and summarize source material,
 - point out missing decisions, user-facing implications, and edge cases,
 - suggest structure and produce reviewable drafts,
+- write drafts to files or update docs once you approve the change,
 - handle boilerplate.
 
 By default, it doesn't:
 
 - decide product behavior,
 - state unsupported claims as fact,
-- edit source files or publish anything,
+- write or change files without your approval, or publish anything,
 - treat its own inferences as truth,
 - make irreversible decisions for you.
 
@@ -241,13 +267,13 @@ produces and decide what to keep.
 
 Socratic Garden doesn't:
 
-- edit your repository, by design — the agent modes are read-only, and the CLI
-  only ever writes session files (plus `socratic-garden.yaml` and the
-  `.socratic-garden/` work directory on `init`),
+- change your repository without your approval — the agent modes write only the
+  files you approve, and the CLI only ever writes session files (plus
+  `socratic-garden.yaml` and the `.socratic-garden/` work directory on `init`),
 - run autonomous file-editing agents,
 - call any AI provider or make network requests,
 - act as an MCP server, GitHub app, GitHub Action, or web app,
-- propose diffs or open pull requests,
+- open pull requests,
 - publish documentation on your behalf.
 
 

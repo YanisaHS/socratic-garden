@@ -1,5 +1,10 @@
 # Documentation review report
 
+_This is the full-depth review format, for docs where the stakes justify it. For
+a small or low-stakes doc, a short verdict plus the few issues that matter is
+enough — use only the sections below that the doc actually needs, and skip the
+rest rather than filling them in._
+
 ## Summary
 
 _A short overall assessment of the artifact._

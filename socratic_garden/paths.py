@@ -19,8 +19,8 @@ from pathlib import Path
 PACKAGE_ROOT = Path(__file__).resolve().parent
 REPO_ROOT = PACKAGE_ROOT.parent
 
-# Bundled, agent-native resources. These live under .github/ so that opening the
-# repository in VS Code exposes the agents and skills directly, and so the whole
+# Bundled, agent-native resources. These live under .github/ so that a tool such
+# as the Copilot CLI exposes the agents and skills directly, and so the whole
 # set can be copied into another project's .github/ folder.
 #
 # NOTE: because these resources live at the repo root rather than inside the

@@ -15,26 +15,34 @@ from a checkout of this repository, or to copy both `.github/` and
 `socratic_garden/` into your project.
 
 You need Python 3.11 or later only if you use the command-line tool. The agent
-modes need an AI coding tool that reads custom agents, such as VS Code with
-GitHub Copilot.
+modes need a tool that reads custom agents, such as the Copilot CLI.
 
 ## Using the agent modes
 
-The agent modes are the main way to use Socratic Garden.
+The agent modes are the main way to use Socratic Garden. Use them in any tool that
+reads custom agents.
 
-1. Open the repository in VS Code with GitHub Copilot.
-2. Open the Copilot chat view.
-3. Select an agent mode from the mode selector. The available modes are Clarify
-   Change, Define User Experience, Design Doc Assistant, Documentation Planner,
-   Documentation Reviewer, and Draft Documentation.
-4. Describe what you are working on in a sentence or two.
-5. Answer the questions the mode asks, one at a time.
-6. When the mode has enough, it produces a structured artifact in the chat.
-7. Copy the parts you want to keep into your own docs or notes.
+For example, with the Copilot CLI: clone this project, run `copilot` from the
+project directory, then pick a mode with `/agent`. Any other tool that reads
+custom agents works the same way — open the repository in it and select a mode.
 
-The modes use read and search tools only. They read your code and docs to ask
-better questions, but they don't edit your files. Nothing they produce is final
-until you decide it is.
+### Working through a mode
+
+Once a mode is running:
+
+1. Describe what you are working on in a sentence or two.
+2. Answer the questions the mode asks, one at a time.
+3. When the mode has enough, it produces a structured artifact in the chat.
+4. Keep what you want: copy it into your own docs, or ask the mode to write it to
+   a file for you and approve the change.
+
+The available modes are Clarify Change, Define User Experience, Design Doc
+Assistant, Documentation Planner, Documentation Reviewer, and Draft Documentation.
+
+The modes read your code and docs to ask better questions. They produce their
+artifacts in the chat, and they can write a draft to a file or update an existing
+doc when you want to keep it — but only after you approve the change. Nothing they
+produce is saved until you decide it is.
 
 ### What a session looks like
 

@@ -150,8 +150,9 @@ def cmd_init(config_arg: str) -> int:
     print()
     print("Next steps:")
     print("  1. Edit socratic-garden.yaml to describe your project and sources.")
-    print("  2. In VS Code Copilot, pick an agent mode (e.g. Clarify Change) and")
-    print("     start a conversation. Run 'socratic-garden modes' to see them.")
+    print("  2. Run 'copilot' in this directory, pick an agent mode with /agent")
+    print("     (e.g. Clarify Change), and start a conversation. Run")
+    print("     'socratic-garden modes' to see them.")
     print('  3. No agent-skill support? Generate a fallback session instead, e.g.')
     print('     socratic-garden clarify --topic "..."')
     return 0
@@ -182,7 +183,7 @@ def cmd_modes() -> int:
     from socratic_garden.sessions import COMMAND_ALIASES
 
     stem_to_verb = {stem: verb for verb, stem in COMMAND_ALIASES.items()}
-    print("Agent modes (use in VS Code Copilot, or via the fallback CLI):")
+    print("Agent modes (use in a tool that reads custom agents, or via the fallback CLI):")
     print()
     for mode in modes.values():
         verb = stem_to_verb.get(mode.key, mode.key)
@@ -191,7 +192,7 @@ def cmd_modes() -> int:
         if summary:
             print(f"              {summary}")
     print()
-    print("In VS Code Copilot: pick a mode from the agent selector.")
+    print("Copilot CLI: run 'copilot' in the project, then pick a mode with /agent.")
     print('Fallback: socratic-garden <mode> --topic "..."')
     return 0
 

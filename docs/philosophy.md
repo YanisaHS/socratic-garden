@@ -37,6 +37,7 @@ AI can:
 - suggest documentation structure,
 - produce reviewable drafts,
 - handle boilerplate,
+- write or update files once the human approves the change,
 - produce artifacts that humans can edit, accept, reject, or ignore.
 
 AI must not, by default:
@@ -80,8 +81,8 @@ Every Socratic Garden session produces a **working artifact**, not a source of
 truth. You reach it one of two ways.
 
 The primary path is agent-native. You open the repository in a tool that reads
-custom agents (VS Code Copilot), pick an agent mode, and it works through the
-change with you using its skills:
+custom agents (such as the Copilot CLI), pick an agent mode, and it works through
+the change with you using its skills:
 
 ```
 Human goal
@@ -108,6 +109,7 @@ Human goal
 
 Either way, the human owns truth, strategy, user experience, and final
 documentation. AI handles questioning, synthesis, structure, and boilerplate. The
-agent modes are read-only by design: with read and search tools only, they can't
-edit source files even by accident, so the human-driven promise is enforced by
-the tooling rather than left to good intentions.
+agent modes can write files and update existing docs, but only with your
+approval: they propose a change and you confirm it before anything is saved, so
+the human-driven promise is enforced by that approval step rather than left to
+good intentions.
