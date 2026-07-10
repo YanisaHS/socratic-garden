@@ -54,7 +54,7 @@ will work similarly.
 1. Clone this project and `cd` into it:
 
    ```bash
-   git clone <this-repo>
+   git clone git@github.com:YanisaHS/socratic-garden.git
    cd socratic-garden
    ```
 
@@ -70,6 +70,24 @@ will work similarly.
 The mode works through the change with you and produces a reviewable artifact.
 Python 3.11+ is only needed for the fallback command-line tool, not the agent
 modes.
+
+### Using it on your own project
+
+Running from this repo works on Socratic Garden's own files, which is fine for a
+try-out. To use the modes while working on your own project, install them at the
+personal level so they show up in every project you open:
+
+```bash
+git clone git@github.com:YanisaHS/socratic-garden.git ~/socratic-garden
+mkdir -p ~/.copilot/agents ~/.copilot/skills
+ln -s ~/socratic-garden/.github/agents/*.agent.md ~/.copilot/agents/
+ln -s ~/socratic-garden/.github/skills/*          ~/.copilot/skills/
+```
+
+Then run `copilot` from your own project and pick a mode with `/agent`. Because
+these are symlinks into your clone, a `git pull` in `~/socratic-garden` updates
+the modes everywhere — you stay on upstream instead of copying a snapshot that
+drifts.
 
 For a full walkthrough of both the agent modes and the command-line tool, see
 [docs/usage.md](docs/usage.md).

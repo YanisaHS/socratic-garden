@@ -7,24 +7,41 @@ agents directly. For the reasoning behind the design, see
 
 ## Before you start
 
-Socratic Garden lives in a `.github/` folder inside a repository. To use it in
-your own project, copy the `.github/agents/` and `.github/skills/` folders from
-this repository into your project's `.github/` folder. The command-line tool
-also expects the `socratic_garden/` package, so the simplest setup is to work
-from a checkout of this repository, or to copy both `.github/` and
-`socratic_garden/` into your project.
+Socratic Garden's agent modes live in `.github/agents/` and its skills in
+`.github/skills/`. There are two ways to use them:
 
-You need Python 3.11 or later only if you use the command-line tool. The agent
-modes need a tool that reads custom agents, such as the Copilot CLI.
+- **Try them out.** Clone this repository, run `copilot` from the checkout, and
+  the modes act on Socratic Garden's own files. Good for a first look.
+- **Use them on your own project.** Install the modes at the personal level so
+  they show up in every project you open. Clone this repository once and symlink
+  its agent and skill folders into your personal Copilot directories:
+
+  ```bash
+  git clone git@github.com:YanisaHS/socratic-garden.git ~/socratic-garden
+  mkdir -p ~/.copilot/agents ~/.copilot/skills
+  ln -s ~/socratic-garden/.github/agents/*.agent.md ~/.copilot/agents/
+  ln -s ~/socratic-garden/.github/skills/*          ~/.copilot/skills/
+  ```
+
+  Then run `copilot` from your own project and pick a mode with `/agent`. Because
+  these are symlinks, a `git pull` in `~/socratic-garden` keeps the modes current
+  without copying a snapshot that drifts. A brand-new agent or skill added
+  upstream needs one more `ln -s`.
+
+You need Python 3.11 or later only if you use the command-line tool, which runs
+from a checkout of this repository. The agent modes need a tool that reads custom
+agents, such as the Copilot CLI.
 
 ## Using the agent modes
 
 The agent modes are the main way to use Socratic Garden. Use them in any tool that
 reads custom agents.
 
-For example, with the Copilot CLI: clone this project, run `copilot` from the
-project directory, then pick a mode with `/agent`. Any other tool that reads
-custom agents works the same way — open the repository in it and select a mode.
+With the Copilot CLI, run `copilot` and pick a mode with `/agent`. If you cloned
+this repository, run it from the checkout to try the modes on Socratic Garden's
+own files; if you installed the modes into `~/.copilot/` (see Before you start),
+run it from your own project instead. Any other tool that reads custom agents
+works the same way — open the repository in it and select a mode.
 
 ### Working through a mode
 

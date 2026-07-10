@@ -1,6 +1,6 @@
 ---
 name: assess-quality-attributes
-description: 'Pressure-test a design against the non-functional and enterprise concerns real, production software must meet: security, privacy, compliance and regulation, API and interface contracts, performance, scalability, reliability, operability and observability, usability and accessibility, and specialized or constrained environments. Use when creating or reviewing a design so these are decided on purpose, not discovered in production.'
+description: 'Weigh a design against the non-functional and enterprise concerns that apply to it — security, privacy, compliance, API and interface contracts, performance, scalability, reliability, operability, usability and accessibility, and specialized environments — as lenses to judge which matter here, not a checklist to cover. Use when creating or reviewing a design so the ones that matter are decided on purpose, not discovered in production.'
 ---
 
 # Assess quality attributes
