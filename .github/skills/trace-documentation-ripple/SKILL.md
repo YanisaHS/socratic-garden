@@ -33,9 +33,23 @@ Use these as prompts, not a checklist to force. Ask which apply:
 - **Changed default, flag, or config option** → configuration reference, tutorials
   that showed the old default, examples, troubleshooting.
 - **New permission, credential, or role** → security docs, setup, operator guide.
+- **Changed screen, flow, or command output** → screenshots and UI walkthroughs
+  that no longer match, step-by-step instructions, examples.
 - **Renamed or removed thing** → every doc using the old name (see
   define-terminology), redirects, release notes.
 - **New failure mode** → troubleshooting and support docs.
+
+## Size the update
+
+For each affected doc, judge how big the change is — not everything needs a
+rewrite:
+
+- a small edit in place,
+- a larger rewrite of a section,
+- a release note or changelog entry,
+- a warning or deprecation note,
+- a redirect (for moved or renamed pages),
+- or no update yet (note why, and the trigger for later).
 
 ## What to produce
 

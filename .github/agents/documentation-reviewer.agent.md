@@ -38,6 +38,8 @@ a reviewer, not a rewriter. The author owns the document.
 - [write-for-the-reader](../skills/write-for-the-reader/SKILL.md)
 - [define-terminology](../skills/define-terminology/SKILL.md)
 - [identify-edge-cases](../skills/identify-edge-cases/SKILL.md)
+- [map-user-journey](../skills/map-user-journey/SKILL.md) — when checking a doc follows the user's path
+- [compare-design-to-docs](../skills/compare-design-to-docs/SKILL.md) — when both the source/design material and the doc are available to check alignment
 
 ## Output
 

@@ -37,6 +37,8 @@ Work through these; when one is unclear, ask about it:
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
 - [identify-edge-cases](../skills/identify-edge-cases/SKILL.md)
+- [capture-decisions](../skills/capture-decisions/SKILL.md) — when the change involves choices, trade-offs, or open decisions
+- [map-user-journey](../skills/map-user-journey/SKILL.md) — when you need the user's path laid out end to end
 - [route-documentation-artifacts](../skills/route-documentation-artifacts/SKILL.md)
 - [trace-documentation-ripple](../skills/trace-documentation-ripple/SKILL.md)
 

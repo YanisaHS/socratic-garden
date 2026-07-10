@@ -39,6 +39,7 @@ first. Say so plainly rather than drafting on top of an unclear foundation.
 - [write-for-the-reader](../skills/write-for-the-reader/SKILL.md)
 - [define-terminology](../skills/define-terminology/SKILL.md)
 - [right-size-the-documentation](../skills/right-size-the-documentation/SKILL.md)
+- [map-user-journey](../skills/map-user-journey/SKILL.md) — when drafting a task or walkthrough that follows a user path
 - [route-documentation-artifacts](../skills/route-documentation-artifacts/SKILL.md)
 
 ## Output

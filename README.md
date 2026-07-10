@@ -94,6 +94,8 @@ work, and the library is meant to grow as new disciplines prove useful.
 - **separate-fact-from-inference** labels what is known versus assumed.
 - **extract-user-facing-implications** turns changes into user-visible effects.
 - **identify-edge-cases** surfaces boundaries, failure modes, and gaps.
+- **map-user-journey** traces the user's path end to end, in order.
+- **capture-decisions** records the choices and trade-offs behind a change.
 - **write-for-the-reader** keeps docs about what the user does, not how the
   software was built.
 - **define-terminology** keeps names consistent across a doc and the doc set.
@@ -101,6 +103,8 @@ work, and the library is meant to grow as new disciplines prove useful.
   needs.
 - **route-documentation-artifacts** decides which docs a change needs.
 - **trace-documentation-ripple** finds existing docs a change also affects.
+- **compare-design-to-docs** checks a doc against its source material for
+  alignment.
 - **documentation-templates** holds the output structures every mode produces.
   The templates live under
   [.github/skills/documentation-templates/assets/](.github/skills/documentation-templates/assets).
@@ -257,7 +261,6 @@ The following are possible future directions and aren't implemented yet.
 - Optional AI provider integration for the fallback path.
 - A patch proposal mode that creates reviewable diffs.
 - A Git diff or pull-request context mode.
-- A design doc comparison mode.
 - Artifact validation and CI support for deterministic checks.
 
 ## License

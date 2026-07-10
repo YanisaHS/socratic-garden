@@ -37,6 +37,8 @@ go out of date.
 - [right-size-the-documentation](../skills/right-size-the-documentation/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
+- [capture-decisions](../skills/capture-decisions/SKILL.md) — when routing depends on an unresolved decision
+- [compare-design-to-docs](../skills/compare-design-to-docs/SKILL.md) — when both design/source material and a doc are available to check alignment
 - [grilling](../skills/grilling/SKILL.md)
 
 ## Output

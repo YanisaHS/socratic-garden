@@ -38,6 +38,8 @@ decisions recorded, not in polished prose. The human makes the decisions.
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
 - [identify-edge-cases](../skills/identify-edge-cases/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
+- [capture-decisions](../skills/capture-decisions/SKILL.md) — for the choices, trade-offs, and rejected options behind the design
+- [compare-design-to-docs](../skills/compare-design-to-docs/SKILL.md) — when checking a doc against this design as source material
 
 ## Output
 
