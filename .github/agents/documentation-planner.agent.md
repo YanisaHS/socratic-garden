@@ -24,9 +24,17 @@ Decide where the knowledge belongs: design docs, public user docs, internal
 engineering docs, reproduction/testing notes, release-note input, no docs yet,
 docs needed later (with a trigger), or more SME clarification needed.
 
+Don't stop at the obvious new document. Trace where the change also ripples into
+**existing** docs — upgrade guides, install and configuration references,
+networking or port lists, security notes, requirements — so they don't silently
+go out of date.
+
 ## Skills this mode uses
 
 - [route-documentation-artifacts](../skills/route-documentation-artifacts/SKILL.md)
+- [trace-documentation-ripple](../skills/trace-documentation-ripple/SKILL.md)
+- [identify-the-audience](../skills/identify-the-audience/SKILL.md)
+- [right-size-the-documentation](../skills/right-size-the-documentation/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
 - [grilling](../skills/grilling/SKILL.md)

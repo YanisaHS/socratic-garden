@@ -33,10 +33,12 @@ Work through these; when one is unclear, ask about it:
 ## Skills this mode uses
 
 - [grilling](../skills/grilling/SKILL.md) — the one-question-at-a-time loop
+- [identify-the-audience](../skills/identify-the-audience/SKILL.md)
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
 - [identify-edge-cases](../skills/identify-edge-cases/SKILL.md)
 - [route-documentation-artifacts](../skills/route-documentation-artifacts/SKILL.md)
+- [trace-documentation-ripple](../skills/trace-documentation-ripple/SKILL.md)
 
 ## Output
 

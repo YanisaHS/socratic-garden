@@ -8,9 +8,9 @@
 
 > *This project is a work in progress.*
 
-Socratic Garden helps engineering teams produce better documentation.
+Socratic Garden helps engineering teams produce better documentation and better products.
 
-It does this by helping you think a change through: what it really does, who it
+It does this by helping you think a change through: what the change really does, who it
 affects, which decisions are still open, and where the reasoning needs improvements.
 Working this out gives you clearer design docs, user docs, and internal notes —
 and, because the gaps surface early, a better thought-out product at the end.
@@ -90,12 +90,17 @@ work, and the library is meant to grow as new disciplines prove useful.
 
 - **grilling** draws out unstated goals and decisions by interviewing you one
   question at a time.
+- **identify-the-audience** fixes who the doc is for before anything is written.
 - **separate-fact-from-inference** labels what is known versus assumed.
 - **extract-user-facing-implications** turns changes into user-visible effects.
 - **identify-edge-cases** surfaces boundaries, failure modes, and gaps.
 - **write-for-the-reader** keeps docs about what the user does, not how the
   software was built.
+- **define-terminology** keeps names consistent across a doc and the doc set.
+- **right-size-the-documentation** matches how much to write to what the reader
+  needs.
 - **route-documentation-artifacts** decides which docs a change needs.
+- **trace-documentation-ripple** finds existing docs a change also affects.
 - **documentation-templates** holds the output structures every mode produces.
   The templates live under
   [.github/skills/documentation-templates/assets/](.github/skills/documentation-templates/assets).

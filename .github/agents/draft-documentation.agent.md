@@ -34,8 +34,11 @@ first. Say so plainly rather than drafting on top of an unclear foundation.
 ## Skills this mode uses
 
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
+- [identify-the-audience](../skills/identify-the-audience/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
 - [write-for-the-reader](../skills/write-for-the-reader/SKILL.md)
+- [define-terminology](../skills/define-terminology/SKILL.md)
+- [right-size-the-documentation](../skills/right-size-the-documentation/SKILL.md)
 - [route-documentation-artifacts](../skills/route-documentation-artifacts/SKILL.md)
 
 ## Output

@@ -34,6 +34,7 @@ decisions recorded, not in polished prose. The human makes the decisions.
 ## Skills this mode uses
 
 - [grilling](../skills/grilling/SKILL.md)
+- [identify-the-audience](../skills/identify-the-audience/SKILL.md)
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
 - [identify-edge-cases](../skills/identify-edge-cases/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)

@@ -33,9 +33,11 @@ experience.
 ## Skills this mode uses
 
 - [grilling](../skills/grilling/SKILL.md)
+- [identify-the-audience](../skills/identify-the-audience/SKILL.md)
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
 - [identify-edge-cases](../skills/identify-edge-cases/SKILL.md)
+- [define-terminology](../skills/define-terminology/SKILL.md)
 
 ## Output
 
