@@ -117,6 +117,8 @@ work, and the library is meant to grow as new disciplines prove useful.
 - **separate-fact-from-inference** labels what is known versus assumed.
 - **extract-user-facing-implications** turns changes into user-visible effects.
 - **identify-edge-cases** surfaces boundaries, failure modes, and gaps.
+- **assess-quality-attributes** weighs a design against security, compliance, API
+  needs, performance, reliability, usability, and specialized environments, only the ones that actually apply, not all of them.
 - **map-user-journey** traces the user's path end to end, in order.
 - **capture-decisions** records the choices and trade-offs behind a change.
 - **write-for-the-reader** keeps docs about what the user does, not how the

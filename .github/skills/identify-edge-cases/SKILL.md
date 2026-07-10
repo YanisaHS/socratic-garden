@@ -17,6 +17,9 @@ probe for:
 - **Assumptions** — conditions the design silently relies on that may not hold.
 - **Uncovered user paths** — valid ways to reach the feature that the happy path
   does not describe.
+- **Specialized environments** — offline or air-gapped deployments, on-premises
+  vs. cloud, specific platforms or architectures, resource-limited devices, or
+  regional differences the behavior must hold up in.
 
 For each item:
 

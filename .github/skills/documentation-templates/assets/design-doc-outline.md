@@ -1,5 +1,11 @@
 # Design doc outline
 
+> Use this as a menu, not a checklist. Include only the sections this change
+> actually needs — a small or well-understood change may need just a few. Add a
+> section for security, API or interface contracts, performance, reliability,
+> compliance, or specialized environments only when that concern carries real
+> weight here; otherwise leave it out. Keep it lightweight and the tone plain.
+
 ## Overview
 
 _A short summary of what this design is about._

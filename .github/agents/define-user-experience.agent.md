@@ -40,6 +40,7 @@ experience.
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
 - [identify-edge-cases](../skills/identify-edge-cases/SKILL.md)
 - [map-user-journey](../skills/map-user-journey/SKILL.md) — when you need the user's path laid out end to end
+- [assess-quality-attributes](../skills/assess-quality-attributes/SKILL.md) — for the usability, accessibility, and specialized-environment side of the experience
 - [capture-decisions](../skills/capture-decisions/SKILL.md) — when a UX choice or trade-off is being decided
 - [define-terminology](../skills/define-terminology/SKILL.md)
 
