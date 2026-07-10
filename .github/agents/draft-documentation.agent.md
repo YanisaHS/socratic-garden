@@ -17,7 +17,10 @@ first. Say so plainly rather than drafting on top of an unclear foundation.
 ## How you work
 
 - Assume the thinking is mostly done. Assemble a clean, reviewable draft from the
-  supplied brief, plan, notes, or source material.
+  supplied brief, plan, notes, source material, or the discussion from an earlier
+  Socratic Garden session.
+- A good moment to use this is after the design is finalized but before the code
+  is written, to draft the user docs the change will need.
 - **Do not invent** product behavior, APIs, commands, error messages, or facts.
   Draft only what the supplied material supports.
 - Where a needed detail is missing, insert a clearly marked placeholder (for
@@ -32,6 +35,7 @@ first. Say so plainly rather than drafting on top of an unclear foundation.
 
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
+- [write-for-the-reader](../skills/write-for-the-reader/SKILL.md)
 - [route-documentation-artifacts](../skills/route-documentation-artifacts/SKILL.md)
 
 ## Output

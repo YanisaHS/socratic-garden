@@ -1,6 +1,6 @@
 ---
 name: extract-user-facing-implications
-description: 'Identify how a technical change affects the people who use or operate a system: tasks, terminology, UI/API behavior, errors, setup, migration, support, and docs. Use when clarifying a change, defining user experience, or planning documentation.'
+description: 'Identify how a technical change affects the people who use or operate a system: tasks, terminology, UI/API behavior, errors, setup, environment and constraints, migration, support, and docs. Use when clarifying a change, defining user experience, or planning documentation.'
 ---
 
 # Extract user-facing implications
@@ -13,6 +13,9 @@ the system. Walk through each dimension and note where the change lands:
 - **UI / API behavior** — visible changes to screens, commands, or endpoints.
 - **Errors** — new failure messages, changed conditions, removed errors.
 - **Setup / configuration** — new options, defaults, or required steps.
+- **Environment / constraints** — versions, platforms, and specialized
+  environments this depends on, plus security, networking, and permission
+  considerations the user must account for.
 - **Migration** — what existing users must do to adopt the change.
 - **Support** — new questions, tickets, or troubleshooting this may cause.
 - **Documentation** — which docs must change and which new docs are needed.

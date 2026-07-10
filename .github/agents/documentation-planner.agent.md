@@ -1,5 +1,5 @@
 ---
-description: 'Decide what documentation a change actually needs and where each piece belongs: design docs, public user docs, internal docs, release notes, or no docs yet. Grills the human where routing is unclear, then produces a documentation plan. Use before writing docs to avoid writing the wrong thing or writing too early.'
+description: 'Decide what documentation a change actually needs and where each piece belongs: design docs, public user docs, internal docs, release notes, or no docs yet. Grills the human where routing is unclear, then produces a documentation plan. A good moment to run it is once the design is finalized but before the code is written. Use before writing docs to avoid writing the wrong thing or writing too early.'
 name: Documentation Planner
 tools: [read, search]
 ---

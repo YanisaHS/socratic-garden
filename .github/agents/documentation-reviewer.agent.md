@@ -34,6 +34,7 @@ a reviewer, not a rewriter. The author owns the document.
 
 - [separate-fact-from-inference](../skills/separate-fact-from-inference/SKILL.md)
 - [extract-user-facing-implications](../skills/extract-user-facing-implications/SKILL.md)
+- [write-for-the-reader](../skills/write-for-the-reader/SKILL.md)
 - [identify-edge-cases](../skills/identify-edge-cases/SKILL.md)
 
 ## Output

@@ -93,6 +93,8 @@ work, and the library is meant to grow as new disciplines prove useful.
 - **separate-fact-from-inference** labels what is known versus assumed.
 - **extract-user-facing-implications** turns changes into user-visible effects.
 - **identify-edge-cases** surfaces boundaries, failure modes, and gaps.
+- **write-for-the-reader** keeps docs about what the user does, not how the
+  software was built.
 - **route-documentation-artifacts** decides which docs a change needs.
 - **documentation-templates** holds the output structures every mode produces.
   The templates live under
