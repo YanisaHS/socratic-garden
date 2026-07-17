@@ -1,3 +1,5 @@
+schema_version: 1
+
 project:
   name: Example Project
   description: A small example service used to demonstrate Socratic Garden.

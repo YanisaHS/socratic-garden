@@ -32,6 +32,9 @@ You need Python 3.11 or later only if you use the command-line tool, which runs
 from a checkout of this repository. The agent modes need a tool that reads custom
 agents, such as the Copilot CLI.
 
+To install the skills in other tools — Zed, Claude Code, Codex, Cursor, and more —
+see [installation.md](installation.md).
+
 ## Using the agent modes
 
 The agent modes are the main way to use Socratic Garden. Use them in any tool that
@@ -56,10 +59,11 @@ Once a mode is running:
 The available modes are Clarify Change, Define User Experience, Design Doc
 Assistant, Documentation Planner, Documentation Reviewer, and Draft Documentation.
 
-The modes read your code and docs to ask better questions. They produce their
-artifacts in the chat, and they can write a draft to a file or update an existing
-doc when you want to keep it — but only after you approve the change. Nothing they
-produce is saved until you decide it is.
+The modes read your code and docs — and your `socratic-garden.yaml` if you have
+one — to ask better questions. They produce their artifacts in the chat, and they
+can write a draft to a file or update an existing doc when you want to keep it —
+but only after you approve the change. Nothing they produce is saved until you
+decide it is.
 
 ### What a session looks like
 

@@ -187,11 +187,17 @@ def _load_yaml(text: str) -> dict[str, Any]:
 # Config model
 # ---------------------------------------------------------------------------
 
+# Current project-config schema version. Bump it when the config format changes in
+# a way older tooling could misread. A config may declare its own schema_version;
+# when the field is absent, this version is assumed.
+SCHEMA_VERSION = 1
+
 
 @dataclass
 class Config:
     """Parsed project configuration."""
 
+    schema_version: int = SCHEMA_VERSION
     project_name: str = "Unnamed project"
     project_description: str = ""
     sources: dict[str, list[str]] = field(default_factory=dict)
@@ -205,6 +211,11 @@ class Config:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any], config_path: Path) -> "Config":
+        raw_version = data.get("schema_version", SCHEMA_VERSION)
+        try:
+            schema_version = int(raw_version)
+        except (TypeError, ValueError):
+            schema_version = SCHEMA_VERSION
         project = data.get("project") or {}
         sources_raw = data.get("sources") or {}
         sources: dict[str, list[str]] = {}
@@ -217,6 +228,7 @@ class Config:
                 sources[key] = [str(value)]
         outputs = data.get("outputs") or {}
         return cls(
+            schema_version=schema_version,
             project_name=str(project.get("name", "Unnamed project")),
             project_description=str(project.get("description", "")),
             sources=sources,
@@ -257,6 +269,8 @@ def load_config(config_path: Path) -> Config:
 
 
 DEFAULT_CONFIG_TEXT = """\
+schema_version: 1
+
 project:
   name: Example Project
   description: A short description of the product, system, or codebase.

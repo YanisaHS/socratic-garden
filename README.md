@@ -89,6 +89,10 @@ these are symlinks into your clone, a `git pull` in `~/socratic-garden` updates
 the modes everywhere — you stay on upstream instead of copying a snapshot that
 drifts.
 
+Using a different tool? See [docs/installation.md](docs/installation.md) for
+installing the skills in Zed, Claude Code, Codex, Cursor, and others, including
+`npx skills add`.
+
 For a full walkthrough of both the agent modes and the command-line tool, see
 [docs/usage.md](docs/usage.md).
 
@@ -237,6 +241,8 @@ A project supplies its own context and source locations through
 `socratic-garden.yaml`, so the environment stays project-agnostic.
 
 ```yaml
+schema_version: 1
+
 project:
   name: Example Project
   description: A short description of the product, system, or codebase.
@@ -266,6 +272,9 @@ rules:
 outputs:
   work_dir: .socratic-garden
 ```
+
+`schema_version` records the config format version. It's optional and assumed to
+be `1` when omitted, so existing configs keep working.
 
 YAML support uses a built-in minimal parser. Installing PyYAML
 (`pip install -e ".[yaml]"`) enables full YAML if you need it.
