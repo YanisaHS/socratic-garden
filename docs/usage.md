@@ -56,8 +56,9 @@ Once a mode is running:
 4. Keep what you want: copy it into your own docs, or ask the mode to write it to
    a file for you and approve the change.
 
-The available modes are Clarify Change, Define User Experience, Design Doc
-Assistant, Documentation Planner, Documentation Reviewer, and Draft Documentation.
+The available modes are Choose a Mode (a guide to the rest), Clarify Change,
+Define User Experience, Design Doc Assistant, Documentation Planner, Documentation
+Reviewer, and Draft Documentation.
 
 The modes read your code and docs — and your `socratic-garden.yaml` if you have
 one — to ask better questions. They produce their artifacts in the chat, and they
@@ -88,8 +89,9 @@ When the picture is clear, it hands you a change brief you can review.
 
 ### Choosing a mode
 
-| Start here | When you want to |
+| Mode | When you want to |
 | --- | --- |
+| **Choose a Mode** | Describe what you're working on and get pointed to the right mode. |
 | **Clarify Change** | Pin down a fuzzy feature idea, behavior change, or bug fix. |
 | **Define User Experience** | Decide how a feature should feel to use. |
 | **Design Doc Assistant** | Write or pressure-test an engineering design doc. |
@@ -97,9 +99,16 @@ When the picture is clear, it hands you a change brief you can review.
 | **Documentation Reviewer** | Check an existing doc against its purpose. |
 | **Draft Documentation** | Turn decisions you have already made into a first draft. |
 
-A common path is Clarify Change, then Define User Experience or Design Doc
-Assistant, then Documentation Planner, and finally Draft Documentation. Use only
-the modes a given change needs.
+If you're not sure where to begin, run **Choose a Mode** and answer one question;
+it points you to the right mode. A common path is Clarify Change, then Define User
+Experience or Design Doc Assistant, then Documentation Planner, and finally Draft
+Documentation. Use only the modes a given change needs.
+
+When you move from one mode to the next, treat it as a fresh start. Keep the
+artifact the last mode produced — the brief, the design — and hand it to the next
+one, rather than switching mid-conversation and expecting it to carry everything.
+With the command-line tool, `--file` does this; in a chat tool, start a new
+conversation for the next mode and paste or point at the artifact.
 
 ## Using the command-line tool
 
@@ -150,17 +159,19 @@ and the output template.
 socratic-garden init
 socratic-garden modes
 socratic-garden skills
-socratic-garden clarify   --topic "..."
-socratic-garden ux        --topic "..."
-socratic-garden design    --topic "..."
-socratic-garden plan-docs --topic "..."
+socratic-garden choose-a-mode
+socratic-garden clarify   --topic "..." [--file path/to/prior.md]
+socratic-garden ux        --topic "..." [--file path/to/prior.md]
+socratic-garden design    --topic "..." [--file path/to/prior.md]
+socratic-garden plan-docs --topic "..." [--file path/to/prior.md]
 socratic-garden draft     --topic "..." [--file path/to/brief.md]
 socratic-garden review    --file path/to/doc.md
 ```
 
 The `review` command reads the file you pass and focuses the session on it. The
-`draft` command can take an optional `--file` holding a brief or plan to draft
-from. Every session-generating command accepts `--config path/to/config.yaml`;
+`clarify`, `ux`, `design`, `plan-docs`, and `draft` commands each take an optional
+`--file` so you can carry a prior artifact — a brief, a design, or notes — into the
+next stage. Every session-generating command accepts `--config path/to/config.yaml`;
 the default is `socratic-garden.yaml` in the current directory.
 
 The `Makefile` wraps these commands. Run `make help` to see the shortcuts.
@@ -168,9 +179,9 @@ The `Makefile` wraps these commands. Run `make help` to see the shortcuts.
 ## Where output goes
 
 The `.socratic-garden/` work directory holds a `sessions/` folder for generated
-session files, plus `context-packs/`, `briefs/`, `drafts/`, `reviews/`, and
-`decisions/` folders. Only `sessions/` is written automatically. The others are
-there so you have an obvious place to save the artifacts you decide to keep.
+session files. That's the only folder Socratic Garden creates, since it's the only
+one it writes to. Keep anything you decide to save in folders of your own choosing
+alongside it.
 
 ## Keeping authority
 

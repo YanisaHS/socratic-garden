@@ -50,6 +50,32 @@ def test_discover_modes_finds_all_agents() -> None:
     assert "grilling" in skill_dirs
 
 
+def test_choose_a_mode_is_a_router() -> None:
+    router = discover_modes().get("choose-a-mode")
+    assert router is not None, "expected a choose-a-mode router mode"
+    skill_dirs = {p.parent.name for p in router.skill_paths}
+    assert {"choose-a-mode", "grilling"} <= skill_dirs
+    # The router points to other modes; it produces no artifact of its own.
+    assert router.template_path is None
+
+
+def test_every_mode_composes_at_least_one_skill() -> None:
+    for mode in discover_modes().values():
+        assert mode.skill_paths, f"{mode.key} references no skills"
+
+
+def test_thinking_modes_close_with_a_recap() -> None:
+    modes = discover_modes()
+    for key in (
+        "clarify-change",
+        "define-user-experience",
+        "design-doc-assistant",
+        "documentation-planner",
+    ):
+        skill_dirs = {p.parent.name for p in modes[key].skill_paths}
+        assert "recap-the-session" in skill_dirs, f"{key} should reference recap-the-session"
+
+
 def test_resolve_mode_accepts_alias_and_stem() -> None:
     assert resolve_mode("clarify").key == "clarify-change"
     assert resolve_mode("clarify-change").key == "clarify-change"
@@ -185,6 +211,17 @@ def test_review_includes_file_content(project: Path, tmp_path: Path) -> None:
     result = generate_session("review", config, topic="", input_file=doc)
     text = result.path.read_text(encoding="utf-8")
     assert "UNIQUE_MARKER_TEXT" in text
+
+
+def test_thinking_command_carries_prior_artifact(project: Path, tmp_path: Path) -> None:
+    # A prior artifact passed with --file is carried into the next stage's session,
+    # not just for review/draft but for the thinking commands too.
+    prior = tmp_path / "brief.md"
+    prior.write_text("# Brief\n\nCARRIED_ARTIFACT_MARKER\n", encoding="utf-8")
+    config = load_config(project)
+    result = generate_session("clarify", config, topic="next stage", input_file=prior)
+    text = result.path.read_text(encoding="utf-8")
+    assert "CARRIED_ARTIFACT_MARKER" in text
 
 
 def test_missing_source_path_warns_not_fails(project: Path) -> None:

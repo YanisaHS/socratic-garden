@@ -30,6 +30,8 @@ the ones that don't apply. Match the weight of the doc to the change (see
 - Where a section matters but isn't resolved yet, keep it and note it as an open
   question or placeholder rather than guessing.
 - Keep facts, inferences, and open questions distinguishable within each section.
+- When a line states a fact drawn from source material, note where it came from —
+  a path, a doc, or who confirmed it — so a reviewer can trace it.
 - Write plainly. Prefer direct, unpolished language over smooth prose; this is a
   working artifact, not a finished piece.
 

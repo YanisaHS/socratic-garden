@@ -28,8 +28,9 @@ Humans remain responsible for product decisions, user experience, technical accu
 
 Socratic Garden lives in a `.github/` folder you can drop into any repository.
 
-- `.github/agents/` holds six custom agent modes you invoke from the Copilot CLI
-  (or any other tool that reads custom agents).
+- `.github/agents/` holds the agent modes you invoke from the Copilot CLI (or any
+  other tool that reads custom agents): six task modes, plus a **Choose a Mode**
+  guide that points you to the right one when you're not sure.
 - `.github/skills/` holds the reusable skills those modes draw on, each a
   discipline for producing better documentation: interviewing, separating fact
   from inference, finding edge cases, routing knowledge to the right doc, and
@@ -113,9 +114,12 @@ cheapest to fix while they are still questions.
 
 ## The agent modes
 
-Each mode is a custom agent under [.github/agents/](.github/agents). A mode
-composes the skills it needs and ends with a reviewable artifact.
+Each mode is a custom agent under [.github/agents/](.github/agents). Most modes
+compose the skills they need and end with a reviewable artifact; **Choose a Mode**
+is a front door that points you to the right one.
 
+- **Choose a Mode** looks at what you're working on and points you to the right
+  mode to start with, so you don't have to know them all first.
 - **Clarify Change** clarifies a feature idea, behavior change, bug fix, or
   proposal before or during design.
 - **Define User Experience** defines the intended user experience for a feature.
@@ -135,6 +139,8 @@ work, and the library is meant to grow as new disciplines prove useful.
 
 - **grilling** draws out unstated goals and decisions by interviewing you one
   question at a time.
+- **choose-a-mode** points you to the right mode to start with, based on what
+  you're working on.
 - **identify-the-audience** fixes who the doc is for before anything is written.
 - **separate-fact-from-inference** labels what is known versus assumed.
 - **extract-user-facing-implications** turns changes into user-visible effects.
@@ -143,6 +149,8 @@ work, and the library is meant to grow as new disciplines prove useful.
   needs, performance, reliability, usability, and specialized environments, only the ones that actually apply, not all of them.
 - **map-user-journey** traces the user's path end to end, in order.
 - **capture-decisions** records the choices and trade-offs behind a change.
+- **recap-the-session** closes a session with a short recap of decisions, gaps,
+  and the next step.
 - **write-for-the-reader** keeps docs about what the user does, not how the
   software was built.
 - **define-terminology** keeps names consistent across a doc and the doc set.
@@ -223,10 +231,11 @@ Commands:
 socratic-garden init
 socratic-garden modes
 socratic-garden skills
-socratic-garden clarify   --topic "..."
-socratic-garden ux        --topic "..."
-socratic-garden design    --topic "..."
-socratic-garden plan-docs --topic "..."
+socratic-garden choose-a-mode
+socratic-garden clarify   --topic "..." [--file path/to/prior.md]
+socratic-garden ux        --topic "..." [--file path/to/prior.md]
+socratic-garden design    --topic "..." [--file path/to/prior.md]
+socratic-garden plan-docs --topic "..." [--file path/to/prior.md]
 socratic-garden draft     --topic "..." [--file path/to/brief.md]
 socratic-garden review    --file path/to/doc.md
 ```
@@ -276,6 +285,9 @@ outputs:
 `schema_version` records the config format version. It's optional and assumed to
 be `1` when omitted, so existing configs keep working.
 
+The `rules` are guidance the AI is asked to follow, not settings enforced by code.
+They shape how a session behaves and are shown to the AI to honor.
+
 YAML support uses a built-in minimal parser. Installing PyYAML
 (`pip install -e ".[yaml]"`) enables full YAML if you need it.
 
@@ -312,7 +324,6 @@ The following are possible future directions and aren't implemented yet.
 
 - Adapters that install the agents and skills for other tools, such as Cursor and
   Claude Code.
-- A router skill that picks the right mode for you.
 - Optional AI provider integration for the fallback path.
 - A patch proposal mode that creates reviewable diffs.
 - A Git diff or pull-request context mode.

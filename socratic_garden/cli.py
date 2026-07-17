@@ -62,6 +62,18 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("modes", help="List the available agent modes.")
     sub.add_parser("skills", help="List the available skills.")
 
+    p_choose = sub.add_parser(
+        "choose-a-mode",
+        help="Not sure which mode you need? Get pointed to the right one.",
+    )
+    p_choose.add_argument(
+        "--topic",
+        default="",
+        metavar="TEXT",
+        help="Optional: what you're working on right now.",
+    )
+    _add_config_arg(p_choose)
+
     for name, help_text in (
         ("clarify", "Clarify a feature idea, behavior change, bug fix, or proposal."),
         ("ux", "Define the intended user experience for a feature or behavior."),
@@ -74,6 +86,12 @@ def build_parser() -> argparse.ArgumentParser:
             required=True,
             metavar="TEXT",
             help="The feature, change, or question to work on.",
+        )
+        p.add_argument(
+            "--file",
+            default=None,
+            metavar="PATH",
+            help="Optional prior artifact (brief, design, notes) to carry forward.",
         )
         _add_config_arg(p)
 
@@ -275,7 +293,7 @@ def main(argv: list[str] | None = None) -> int:
         return _run_session("draft", args.config, args.topic, args.file)
 
     topic = getattr(args, "topic", "")
-    return _run_session(args.command, args.config, topic, None)
+    return _run_session(args.command, args.config, topic, getattr(args, "file", None))
 
 
 if __name__ == "__main__":  # pragma: no cover

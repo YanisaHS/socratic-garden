@@ -38,17 +38,10 @@ DEFAULT_CONFIG_NAME = "socratic-garden.yaml"
 # Default project-local work directory (may be overridden by config).
 DEFAULT_WORK_DIR = ".socratic-garden"
 
-# Sub-directories created inside the work directory during ``init``.
-# Only ``sessions`` is actively used so far; the rest exist so that the
-# intended artifact model is clear.
-WORK_SUBDIRS = (
-    "sessions",
-    "context-packs",
-    "briefs",
-    "drafts",
-    "reviews",
-    "decisions",
-)
+# Sub-directory created inside the work directory during ``init``. Only
+# ``sessions`` is created, because it's the only folder Socratic Garden writes
+# to; keep anything else you decide to save in folders of your own choosing.
+WORK_SUBDIRS = ("sessions",)
 
 
 def work_dir(base: Path, configured: str = DEFAULT_WORK_DIR) -> Path:
