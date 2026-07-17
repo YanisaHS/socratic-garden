@@ -29,7 +29,9 @@ These are common categories, not a fixed list. Name the ones that apply:
 - **Primary reader** — the one the document must serve. Pick one.
 - **Secondary readers** — who else will read it, and what they need that differs.
 - **Prior knowledge** — what the reader already knows, so the doc starts in the
-  right place.
+  right place. A reader new to the concepts needs them explained, and
+  prerequisites named, not just the steps; an expert needs less. Carry this into
+  the writing, not only the plan.
 - **Their task or decision** — what they came to do or decide.
 - **What they should not need to understand** — detail this reader can be spared.
 
