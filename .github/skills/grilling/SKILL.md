@@ -41,6 +41,24 @@ not an interrogation and not a form to fill out.
 - edge cases and failure modes
 - what would make this the wrong thing to build
 
+## Good vs. weak questions
+
+The difference between a useful grilling and an annoying one is the quality of the
+next question. Aim for specific and answerable.
+
+- **Weak:** "Tell me about the users." → **Better:** "Who hits this error today —
+  end users, operators, or both?"
+- **Weak:** "What are the requirements?" → **Better:** "Is there a case where the
+  upload should *not* retry — a bad file rather than a flaky network?"
+- **Weak:** "Any edge cases?" → **Better:** "If the retry succeeds on the second
+  attempt, could it upload a duplicate?"
+- **Weak:** a five-part numbered questionnaire. → **Better:** the single question
+  that unblocks the most right now, then follow the answer.
+
+Don't ask what the material already answers. If the config, the code, or a supplied
+doc already states it, read it and confirm your reading instead of making the human
+retype it.
+
 ## Boundaries
 
 - Do not decide the answers for the human. Surface the question; let them decide.

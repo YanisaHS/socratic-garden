@@ -30,6 +30,8 @@ the terms down and keep them consistent across the document and the wider doc se
   introduce a second name for something already named.
 - When a term is central or ambiguous, seed a short glossary entry so later docs
   can reuse it instead of reinventing the wording.
+- When the doc set is large enough to drift, keep the agreed terms in one shared
+  place (a glossary doc) so every later doc points at the same definitions.
 
 Consistent terminology is a small discipline with an outsized effect on how
 trustworthy and readable a doc set feels.

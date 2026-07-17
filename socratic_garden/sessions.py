@@ -313,8 +313,8 @@ def generate_session(
             raise SessionError("The review command requires a --file argument.")
         context = read_file_content(config.base_dir, input_file)
         # Reviews focus on one file; skip the broader source tree.
-    elif command in ("draft", "draft-documentation") and input_file is not None:
-        # Draft from an already-defined brief/plan/source file.
+    elif input_file is not None:
+        # Carry a prior artifact (brief, design, plan, or notes) into this stage.
         context = read_file_content(config.base_dir, input_file)
     else:
         context = build_source_context(config)

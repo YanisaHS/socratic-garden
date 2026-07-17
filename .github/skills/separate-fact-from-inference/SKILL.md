@@ -21,6 +21,9 @@ Keep these categories clearly distinct in everything you produce:
 - Never present an inference or a guess as a fact.
 - When source material is missing, say so instead of filling the gap with
   invention.
+- When you state a fact drawn from source material, note where it came from — a
+  file path or line, a doc name, or "confirmed by <person>" — so the reader can
+  check it.
 - If you are unsure which category something belongs in, treat it as an open
   question.
 
