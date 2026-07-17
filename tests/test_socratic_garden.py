@@ -7,12 +7,13 @@ AI calls.
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import pytest
 
 from socratic_garden import cli, frontmatter, paths
-from socratic_garden.config import DEFAULT_CONFIG_TEXT, load_config
+from socratic_garden.config import DEFAULT_CONFIG_TEXT, SCHEMA_VERSION, load_config
 from socratic_garden.sessions import (
     COMMAND_ALIASES,
     SessionError,
@@ -77,6 +78,75 @@ def test_all_referenced_skill_files_exist() -> None:
             assert mode.template_path.exists()
 
 
+# --- Skill format and reachability ----------------------------------------
+
+# Portable Agent Skills naming rule: lowercase letters, digits, and hyphens.
+_SKILL_NAME_RE = re.compile(r"[a-z0-9-]+")
+
+# Length ceilings from the Agent Skills format.
+_MAX_SKILL_NAME = 64
+_MAX_SKILL_DESCRIPTION = 1024
+
+# Skills that no agent links by a SKILL.md reference, but that are still reached
+# another way. documentation-templates is loaded through its template assets,
+# which agents link directly, rather than through its SKILL.md.
+_STANDALONE_SKILLS = {"documentation-templates"}
+
+
+def _skill_dirs() -> list[Path]:
+    return sorted(paths.SKILLS_DIR.glob("*/SKILL.md"))
+
+
+def test_every_skill_conforms_to_agent_skills_format() -> None:
+    skill_paths = _skill_dirs()
+    assert skill_paths, "expected at least one skill on disk"
+    for skill_path in skill_paths:
+        doc = frontmatter.load(skill_path)
+        dir_name = skill_path.parent.name
+        name = doc.get_str("name")
+        description = doc.get_str("description")
+        # name and description are both required by the format.
+        assert name, f"{dir_name} is missing a 'name'"
+        assert description, f"{dir_name} is missing a 'description'"
+        # The name must match its directory so hosts load it by folder.
+        assert name == dir_name, f"{skill_path}: name '{name}' != directory '{dir_name}'"
+        assert _SKILL_NAME_RE.fullmatch(name), (
+            f"skill name '{name}' must be lowercase letters, numbers, and hyphens"
+        )
+        assert len(name) <= _MAX_SKILL_NAME, f"skill name '{name}' exceeds {_MAX_SKILL_NAME} chars"
+        assert len(description) <= _MAX_SKILL_DESCRIPTION, (
+            f"{dir_name} description exceeds {_MAX_SKILL_DESCRIPTION} chars"
+        )
+
+
+def test_every_skill_is_reachable_from_an_agent() -> None:
+    referenced = {
+        skill_path.parent.name
+        for mode in discover_modes().values()
+        for skill_path in mode.skill_paths
+    }
+    on_disk = {p.parent.name for p in _skill_dirs()}
+
+    unreferenced = on_disk - referenced - _STANDALONE_SKILLS
+    assert not unreferenced, (
+        "skills not linked by any agent (link them from a mode, or add to "
+        f"_STANDALONE_SKILLS if reached another way): {sorted(unreferenced)}"
+    )
+
+    # Keep the allow-list honest: every standalone skill must exist and be
+    # reachable through a template asset an agent points at.
+    template_skills = {
+        mode.template_path.parent.parent.name
+        for mode in discover_modes().values()
+        if mode.template_path is not None
+    }
+    for name in _STANDALONE_SKILLS:
+        assert name in on_disk, f"_STANDALONE_SKILLS lists '{name}', which is not on disk"
+        assert name in template_skills, (
+            f"'{name}' is allow-listed as standalone but no agent template points into it"
+        )
+
+
 # --- Session generation ---------------------------------------------------
 
 
@@ -136,6 +206,30 @@ def test_custom_work_dir_respected(tmp_path: Path) -> None:
     result = generate_session("clarify", config, topic="topic")
     assert ".custom-work" in str(result.path)
     assert (tmp_path / ".custom-work" / "sessions").exists()
+
+
+# --- Project config -------------------------------------------------------
+
+
+def test_default_config_declares_current_schema_version(project: Path) -> None:
+    # DEFAULT_CONFIG_TEXT (written by the fixture) declares a schema_version.
+    assert load_config(project).schema_version == SCHEMA_VERSION
+
+
+def test_config_without_schema_version_defaults(tmp_path: Path) -> None:
+    # An older config with no schema_version still loads at the assumed version.
+    config_path = tmp_path / "socratic-garden.yaml"
+    config_path.write_text("project:\n  name: X\n", encoding="utf-8")
+    assert load_config(config_path).schema_version == SCHEMA_VERSION
+
+
+def test_config_reads_explicit_schema_version(tmp_path: Path) -> None:
+    # A declared version is read as-is, so future tooling can branch on it.
+    config_path = tmp_path / "socratic-garden.yaml"
+    config_path.write_text(
+        "schema_version: 2\nproject:\n  name: X\n", encoding="utf-8"
+    )
+    assert load_config(config_path).schema_version == 2
 
 
 # --- Frontmatter parser ---------------------------------------------------

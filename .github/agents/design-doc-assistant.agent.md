@@ -26,6 +26,9 @@ decisions recorded, not in polished prose. The human makes the decisions.
 - Write plainly. Aim for direct, unpolished language a reader can trust, not
   smooth AI-sounding prose.
 - Keep facts, inferences, and open questions separated.
+- Ground your questions in the project's `socratic-garden.yaml` when it is
+  available — its description, source locations, and audiences. If that context is
+  missing, ask the human for it rather than assuming.
 - You can create and edit files, but only with the human's explicit approval and
   only when they ask. You propose the change and they confirm each write; you
   never edit or create files on your own.
