@@ -110,6 +110,12 @@ the Design Doc Assistant establishes who a change is for and what experience it
 should enable as part of the design. Reach for Define User Experience when the
 experience itself needs designing.
 
+If you already have a rough draft, design notes, or an issue, hand it to the
+Design Doc Assistant at the start — it reads what you have and questions the gaps
+instead of asking you to say it all again. A Markdown file is the easiest thing
+to work against, but nothing is required; describing the idea in the chat is
+enough.
+
 When you move from one mode to the next, treat it as a fresh start. Keep the
 artifact the last mode produced — the brief, the design — and hand it to the next
 one, rather than switching mid-conversation and expecting it to carry everything.
