@@ -47,6 +47,63 @@ own files; if you installed the modes into `~/.copilot/` (see Before you start),
 run it from your own project instead. Any other tool that reads custom agents
 works the same way — open the repository in it and select a mode.
 
+### Jump straight into a mode
+
+Picking a mode from the `/agent` menu each time is fine, but you can skip it. The
+Copilot CLI takes an `--agent` flag that boots straight into a mode by name:
+
+```bash
+copilot --agent "Design Doc Assistant"
+```
+
+Both the display name (`"Design Doc Assistant"`) and the file stem
+(`design-doc-assistant`) are accepted. Wrap the one you use most in a shell alias:
+
+```bash
+alias design='copilot --agent design-doc-assistant'
+```
+
+This opens the interactive Copilot TUI already focused on the mode, which grills
+you one question at a time. If you'd rather skip the TUI altogether, use the
+harness described next.
+
+### Run a mode without the TUI (the harness)
+
+If you'd rather not use the Copilot terminal UI at all, there's a minimal
+*harness* — [`bin/sg-chat`](../bin/sg-chat) — that owns the human↔agent loop
+itself and renders each turn as plain text. It lets you pick a model, keeps the
+conversation coherent, and drives the Copilot CLI headlessly in the background
+(`copilot -p`), so you never enter the TUI.
+
+```bash
+bin/sg-chat                       # pick a model, then start talking
+bin/sg-chat --model auto          # skip the model prompt
+bin/sg-chat --draft braindump.md  # start the Design Doc Assistant from a draft
+bin/sg-chat --agent "Clarify Change"   # run a different mode
+```
+
+What the harness owns, and what it delegates:
+
+- **It owns** the turn loop, model selection, session continuity (one Copilot
+  `--session-id` for the whole conversation), and rendering.
+- **It delegates** to the Copilot CLI the agent's system prompt (`--agent` injects
+  the mode plus its skills), the model call, and the read/search/edit tools.
+
+Inside the loop, agent replies print to stdout and everything else (prompts, the
+"thinking" spinner, errors) goes to stderr, so you can pipe a transcript. A few
+slash-commands are available: `/model` (switch model, starts a fresh session),
+`/new` (clear the conversation), `/session` (show the session id), `/paste`
+(multi-line input, end with a lone `.`), and `/exit`.
+
+Requirements and caveats:
+
+- Needs the `copilot` binary on `PATH` and a logged-in Copilot session.
+- Unlike the fallback command-line tool below (which never calls an AI provider),
+  **the harness does drive an AI** through the Copilot CLI.
+- It passes `--allow-all-tools` so the agent can read your draft and search the
+  repo without a per-tool prompt; use `--no-tools` to withhold file access. The
+  mode still only writes files when you approve it in the conversation.
+
 ### Working through a mode
 
 Once a mode is running:

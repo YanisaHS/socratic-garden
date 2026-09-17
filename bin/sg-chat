@@ -1,0 +1,329 @@
+#!/usr/bin/env python3
+"""sg-chat — a minimal Socratic Garden agent harness (no Copilot TUI).
+
+This is a small, self-contained harness that owns the human <-> agent loop for a
+Socratic Garden mode (by default the Design Doc Assistant). It does *not* open the
+Copilot TUI. Instead it drives the GitHub Copilot CLI headlessly, one turn at a
+time, via ``copilot -p`` (non-interactive), and keeps the conversation coherent
+across turns by reusing a single ``--session-id``.
+
+What the harness owns:
+  * the turn loop (read a human turn, get the agent's reply, repeat),
+  * model selection (``auto`` or any Copilot model id),
+  * session continuity (one session id for the whole conversation),
+  * rendering and a few slash-commands.
+
+What it delegates to the Copilot CLI:
+  * the agent's system prompt (``--agent`` injects the mode + its skills),
+  * inference,
+  * the read/search/edit tools.
+
+Unlike ``python -m socratic_garden`` (a fallback file generator that never calls
+an AI provider), this harness *does* drive an AI through the Copilot CLI. It needs
+the ``copilot`` binary on PATH and a logged-in Copilot session.
+
+Usage:
+  sg-chat [--agent NAME] [--model MODEL] [--draft PATH] [--session-id ID]
+          [--copilot BIN] [--no-tools]
+
+Slash-commands inside the loop:
+  /help            show help
+  /model           choose a different model (starts a fresh session)
+  /new             start a new session (clears the conversation)
+  /session         print the current session id
+  /paste           enter a multi-line message; finish with a lone "." or /end
+  /exit, /quit     leave
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import threading
+import time
+import uuid
+from pathlib import Path
+
+DEFAULT_AGENT = "design-doc-assistant"
+CONFIG_PATH = Path.home() / ".copilot" / "config.json"
+
+
+def eprint(*args: object) -> None:
+    print(*args, file=sys.stderr)
+
+
+def recent_models() -> list[str]:
+    """Read recently-used model ids from the Copilot config, best effort."""
+    try:
+        raw = CONFIG_PATH.read_text(encoding="utf-8")
+    except OSError:
+        return []
+    # The config file may carry ``//`` full-line comments; drop them before parse.
+    cleaned = "\n".join(
+        line for line in raw.splitlines() if not line.lstrip().startswith("//")
+    )
+    try:
+        data = json.loads(cleaned)
+    except json.JSONDecodeError:
+        return []
+    models = data.get("recentModelIds", [])
+    return [m for m in models if isinstance(m, str)]
+
+
+def choose_model(preset: str | None) -> str:
+    """Return the model id to use, prompting the user when not preset."""
+    if preset:
+        return preset
+    options = ["auto", *recent_models()]
+    # De-duplicate while preserving order.
+    seen: set[str] = set()
+    options = [m for m in options if not (m in seen or seen.add(m))]
+
+    eprint("\nSelect a model:")
+    for i, m in enumerate(options, 1):
+        label = "  (let Copilot pick)" if m == "auto" else ""
+        eprint(f"  {i}. {m}{label}")
+    eprint("  Or type any Copilot model id.")
+
+    while True:
+        try:
+            choice = input("model [1]: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            eprint()
+            return "auto"
+        if not choice:
+            return options[0]
+        if choice.isdigit():
+            idx = int(choice)
+            if 1 <= idx <= len(options):
+                return options[idx - 1]
+            eprint(f"  Pick 1-{len(options)}, or type a model id.")
+            continue
+        return choice  # treat as a raw model id; Copilot validates on use.
+
+
+class Spinner:
+    """A tiny stderr spinner shown while a turn is in flight (TTY only)."""
+
+    FRAMES = "|/-\\"
+
+    def __init__(self, label: str = "thinking") -> None:
+        self._label = label
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+        self._active = sys.stderr.isatty()
+
+    def __enter__(self) -> "Spinner":
+        if self._active:
+            self._thread = threading.Thread(target=self._run, daemon=True)
+            self._thread.start()
+        return self
+
+    def _run(self) -> None:
+        i = 0
+        while not self._stop.is_set():
+            frame = self.FRAMES[i % len(self.FRAMES)]
+            sys.stderr.write(f"\r{frame} {self._label}… ")
+            sys.stderr.flush()
+            i += 1
+            time.sleep(0.1)
+
+    def __exit__(self, *exc: object) -> None:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join()
+        if self._active:
+            sys.stderr.write("\r" + " " * (len(self._label) + 12) + "\r")
+            sys.stderr.flush()
+
+
+def run_turn(
+    copilot: str,
+    message: str,
+    *,
+    agent: str,
+    model: str,
+    session_id: str,
+    allow_tools: bool,
+    add_dir: str | None,
+) -> tuple[int, str, str]:
+    """Send one human turn to the agent; return (returncode, stdout, stderr)."""
+    cmd = [
+        copilot,
+        "-p", message,
+        "--agent", agent,
+        "--model", model,
+        "--session-id", session_id,
+        "--silent",
+        "--no-color",
+        "--log-level", "error",
+    ]
+    if allow_tools:
+        cmd.append("--allow-all-tools")
+    if add_dir:
+        cmd += ["--add-dir", add_dir]
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
+
+
+HELP = """\
+Commands:
+  /help            show this help
+  /model           choose a different model (starts a fresh session)
+  /new             start a new session (clears the conversation)
+  /session         print the current session id
+  /paste           enter a multi-line message; finish with a lone "." or /end
+  /exit, /quit     leave
+Anything else is sent to the agent as your next turn.
+"""
+
+
+def read_paste() -> str:
+    eprint('(paste your text; finish with a line containing only "." or /end)')
+    lines: list[str] = []
+    while True:
+        try:
+            line = input()
+        except (EOFError, KeyboardInterrupt):
+            break
+        if line.strip() in (".", "/end"):
+            break
+        lines.append(line)
+    return "\n".join(lines).strip()
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="sg-chat",
+        description="Minimal Socratic Garden agent harness (drives the Copilot "
+        "CLI headlessly; no TUI).",
+    )
+    parser.add_argument(
+        "--agent", default=DEFAULT_AGENT,
+        help=f'Copilot agent to run (default: "{DEFAULT_AGENT}"). Accepts the '
+        'file stem or the display name.',
+    )
+    parser.add_argument(
+        "--model", default=None,
+        help="Model id to use (e.g. auto). If omitted, you'll be asked.",
+    )
+    parser.add_argument(
+        "--draft", default=None,
+        help="Path to a rough-draft / braindump file to start the design from.",
+    )
+    parser.add_argument(
+        "--session-id", default=None,
+        help="Resume an existing Copilot session id instead of starting fresh.",
+    )
+    parser.add_argument(
+        "--copilot", default="copilot",
+        help='Path to the Copilot CLI binary (default: "copilot").',
+    )
+    parser.add_argument(
+        "--no-tools", action="store_true",
+        help="Do not pass --allow-all-tools (the agent then can't read/edit files).",
+    )
+    args = parser.parse_args(argv)
+
+    copilot = shutil.which(args.copilot)
+    if copilot is None:
+        eprint(f"sg-chat: Copilot CLI ('{args.copilot}') was not found on your PATH.")
+        eprint("  Install it: https://docs.github.com/copilot/how-tos/use-copilot-agents/use-copilot-cli")
+        return 127
+
+    draft_path: str | None = None
+    add_dir: str | None = None
+    if args.draft:
+        p = Path(args.draft).expanduser()
+        if not p.is_file():
+            eprint(f"sg-chat: rough-draft file not found: {args.draft}")
+            return 1
+        draft_path = str(p.resolve())
+        add_dir = str(p.resolve().parent)
+
+    model = choose_model(args.model)
+    session_id = args.session_id or str(uuid.uuid4())
+    allow_tools = not args.no_tools
+    resuming = args.session_id is not None
+
+    eprint("\n" + "─" * 60)
+    eprint(f"  Socratic Garden harness — agent: {args.agent}")
+    eprint(f"  model: {model}    session: {session_id}")
+    if resuming:
+        eprint("  (resuming an existing session)")
+    eprint('  Type /help for commands, /exit to quit.')
+    eprint("─" * 60)
+
+    first_turn = not resuming
+
+    while True:
+        try:
+            raw = input("\nyou> ").strip()
+        except EOFError:
+            eprint()
+            break
+        except KeyboardInterrupt:
+            eprint("\n(use /exit to quit)")
+            continue
+
+        if not raw and not (first_turn and draft_path):
+            continue
+
+        low = raw.lower()
+        if low in ("/exit", "/quit"):
+            break
+        if low == "/help":
+            eprint(HELP)
+            continue
+        if low == "/session":
+            eprint(f"session id: {session_id}")
+            continue
+        if low == "/new":
+            session_id = str(uuid.uuid4())
+            first_turn = draft_path is not None  # allow draft re-seed on new session
+            eprint(f"started new session: {session_id}")
+            continue
+        if low == "/model":
+            model = choose_model(None)
+            session_id = str(uuid.uuid4())
+            eprint(f"switched model to {model}; new session: {session_id}")
+            continue
+        if low == "/paste":
+            raw = read_paste()
+            if not raw:
+                continue
+
+        message = raw
+        if first_turn and draft_path:
+            seed = (
+                f"I have a rough draft to work from. Please read the file "
+                f"'{draft_path}' first, reflect your understanding back to me, "
+                f"then grill me on the gaps."
+            )
+            message = f"{seed}\n\n{raw}" if raw else seed
+
+        with Spinner():
+            code, out, err = run_turn(
+                copilot, message,
+                agent=args.agent, model=model, session_id=session_id,
+                allow_tools=allow_tools, add_dir=add_dir,
+            )
+        first_turn = False
+
+        if code != 0:
+            eprint(f"\n[copilot exited {code}]")
+            if err:
+                eprint(err)
+            continue
+        print(f"\n{args.agent}> {out}" if out else "\n(no output)")
+
+    eprint("bye.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

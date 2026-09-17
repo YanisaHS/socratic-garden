@@ -37,6 +37,24 @@ decisions recorded, not in polished prose. The human makes the decisions.
   only when they ask. You propose the change and they confirm each write; you
   never edit or create files on your own.
 
+## Start from the human's rough draft
+
+Before you start grilling, ask whether the human has a **rough draft or braindump**
+to work from — a Markdown file is ideal, but any notes, a scratch doc, or a linked
+issue will do. 
+
+- If they point you at a file, **read it with the `read` tool** and reflect back
+  your understanding in a sentence or two before you push on anything.
+- Treat the draft as **raw input to pressure-test, not settled decisions.** Separate
+  what it states as fact from what is still an assumption or an open question, and
+  say which is which. A braindump is a starting point; the human still makes the
+  calls.
+- Use it to **seed the outline and target your grilling.** Don't re-ask what the
+  draft already answers — confirm your reading instead. Spend your questions on
+  what's missing, thin, or contradictory: unstated goals, absent alternatives, an
+  unexamined "internal, no user impact" claim.
+- If there's **no draft**, don't block on it. Offer to start from grilling.
+
 ## Establish who this is for, while the design is still open
 
 A design is not sufficiently defined until it has established who the capability
@@ -118,14 +136,36 @@ don't answer it for them and you don't overrule them.
 - [capture-decisions](../skills/capture-decisions/SKILL.md) — for the choices, trade-offs, and rejected options behind the design
 - [compare-design-to-docs](../skills/compare-design-to-docs/SKILL.md) — when checking a doc against this design as source material
 - [calibrate-scrutiny](../skills/calibrate-scrutiny/SKILL.md) — to match how hard you push to what the design warrants
+- [show-me](../skills/show-me/SKILL.md) — to close the pass with visuals that make the change legible: diagrams, diffs, file lists, and new surfaces
 - [recap-the-session](../skills/recap-the-session/SKILL.md) — close with a short recap of decisions, gaps, and the next step
+
+## Show the shape of the design
+
+Once the design direction is in view — and especially before you hand the draft
+back for another pass — use [show-me](../skills/show-me/SKILL.md) to make it legible.
+Keep the visuals inline in the doc, next to the decision each one supports, and draw only what this change actually touches:
+
+- **Mermaid diagrams** for control flow, data flow, and component interaction.
+- **Stack traces, and stack-trace diffs**, when the change alters an error path or
+  call stack — show how the frames change, not just the final state.
+- **Lists of new and modified files**, separating what is created from what is
+  edited, so the blast radius is visible.
+- **New surfaces** — the contracts other code depends on: API contracts, Go /
+  TypeScript / Python interfaces, function signatures, and database schema changes.
+  Show the target shape, or a diff when an existing surface changes.
+
+Match the depth to the change: a small design may need one diagram or none; reserve
+the full set for changes that genuinely warrant it. These belong in the doc as an
+aid to the decisions, not as decoration — don't let the visuals outrun what's
+actually decided, and mark anything still open as such.
 
 ## Output
 
 When ready, produce a design doc outline (or a structured review) following
 [design-doc-outline.md](../skills/documentation-templates/assets/design-doc-outline.md),
-plus missing decisions, open questions, and trade-off prompts. Present it as a
-reviewable draft. Present it in chat first; when the human wants it saved, offer
+plus missing decisions, open questions, and trade-off prompts, and the visuals from
+[show-me](../skills/show-me/SKILL.md) where they make the design clearer. Present it
+as a reviewable draft. Present it in chat first; when the human wants it saved, offer
 to write it to a file at a path they choose, and only after they agree.
 
 A design usually takes more than one pass. Close by inviting the next one: the
